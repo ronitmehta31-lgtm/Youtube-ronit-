@@ -15,7 +15,7 @@ from . import tts, visuals
 ROOT = Path(__file__).resolve().parent.parent
 W, H, FPS = 1080, 1920, 30
 PAUSE = 0.25  # silence after each scene, seconds
-WORDS_PER_CAPTION = 3
+LINE_GAP = 0.35  # silence between two lines in the same scene
 FALLBACK_COLORS = [("0x0f2027", "0x2c5364"), ("0x41295a", "0x2f0743"), ("0x1d4350", "0xa43931"),
                    ("0x093028", "0x237a57"), ("0x232526", "0x414345")]
 
@@ -35,8 +35,8 @@ def ass_time(t):
     return f"{cs // 360000}:{cs // 6000 % 60:02d}:{cs // 100 % 60:02d}.{cs % 100:02d}"
 
 
-def write_captions(scenes, path):
-    """scenes: one list of (word, start, end) per scene; captions never span two scenes."""
+def write_captions(scenes, path, per_caption=3):
+    """scenes: one list of (word, start, end) per spoken line; captions never span two lines."""
     head = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
@@ -44,13 +44,13 @@ PlayResY: {H}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,DejaVu Sans,96,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,3,5,60,60,0,1
+Style: Cap,Noto Sans,96,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,3,5,60,60,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     lines = []
-    groups = [words[i:i + WORDS_PER_CAPTION] for words in scenes for i in range(0, len(words), WORDS_PER_CAPTION)]
+    groups = [words[i:i + per_caption] for words in scenes for i in range(0, len(words), per_caption)]
     for n, group in enumerate(groups):
         end = group[-1][2] + 0.15
         if n + 1 < len(groups):
@@ -95,15 +95,20 @@ def render(script_path, out_path):
         all_words, scene_files, audio_files, t = [], [], [], 0.0
         used_clips, credits = set(), []
         for i, scene in enumerate(script["scenes"]):
-            print(f"  scene {i + 1}/{len(script['scenes'])}: {scene['text'][:60]}")
-            mp3 = work / f"s{i}.mp3"
-            words = tts.synthesize(scene["text"], voice, rate, mp3)
-            seconds = duration(mp3) + PAUSE
-            all_words.append([(w, a + t, b + t) for w, a, b in words])
-
-            wav = work / f"s{i}.wav"  # pad each scene's speech with a short silence
-            run("ffmpeg", "-y", "-i", str(mp3), "-af", f"apad=pad_dur={PAUSE}", "-ar", "44100", "-ac", "2", str(wav))
-            audio_files.append(wav)
+            # A scene is one clip with one or more spoken lines, each optionally in its own language/voice.
+            lines = scene.get("lines") or [{"text": scene["text"]}]
+            print(f"  scene {i + 1}/{len(script['scenes'])}: {lines[0]['text'][:60]}")
+            seconds = 0.0
+            for j, line in enumerate(lines):
+                mp3 = work / f"s{i}_{j}.mp3"
+                line_voice = config.get("voices", {}).get(line.get("lang"), voice)
+                words = tts.synthesize(line["text"], line_voice, rate, mp3)
+                all_words.append([(w, a + t + seconds, b + t + seconds) for w, a, b in words])
+                gap = PAUSE if j == len(lines) - 1 else LINE_GAP
+                wav = work / f"s{i}_{j}.wav"  # pad each line's speech with a short silence
+                run("ffmpeg", "-y", "-i", str(mp3), "-af", f"apad=pad_dur={gap}", "-ar", "44100", "-ac", "2", str(wav))
+                audio_files.append(wav)
+                seconds += duration(mp3) + gap
 
             visual, kind, credit = visuals.fetch_visual(scene.get("search", ""), work, i, seconds, used_clips)
             print(f"    visual: {kind or 'none, using a gradient'}")
@@ -120,7 +125,7 @@ def render(script_path, out_path):
         run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", "v.txt", "-c", "copy", "video.mp4", cwd=work)
         (work / "a.txt").write_text("".join(f"file '{p.name}'\n" for p in audio_files))
         run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", "a.txt", "-c", "copy", "voice.wav", cwd=work)
-        write_captions(all_words, work / "captions.ass")
+        write_captions(all_words, work / "captions.ass", config.get("words_per_caption", 3))
 
         music = sorted((ROOT / "assets" / "music").glob("*.mp3"))
         inputs = ["-i", "video.mp4", "-i", "voice.wav"]

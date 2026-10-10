@@ -1,0 +1,94 @@
+{
+  "title": "Rescue Vehicles for Kids | मदद करने वाली गाड़ियाँ",
+  "description": "Fire truck, ambulance, police car and helicopter! फायर ट्रक, एम्बुलेंस, पुलिस की गाड़ी और हेलीकॉप्टर!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "rescue vehicles",
+    "fire truck for kids",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "city street",
+      "lines": [
+        {
+          "text": "Let's meet the helper vehicles!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, मदद करने वाली गाड़ियाँ देखें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "fire truck",
+      "lines": [
+        {
+          "text": "This is a fire truck! It helps put out fires.",
+          "lang": "en"
+        },
+        {
+          "text": "यह फायर ट्रक है! यह आग बुझाने में मदद करता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "ambulance",
+      "lines": [
+        {
+          "text": "This is an ambulance! It takes people to the hospital.",
+          "lang": "en"
+        },
+        {
+          "text": "यह एम्बुलेंस है! यह लोगों को अस्पताल ले जाती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "police car",
+      "lines": [
+        {
+          "text": "This is a police car! It helps keep us safe.",
+          "lang": "en"
+        },
+        {
+          "text": "यह पुलिस की गाड़ी है! यह हमें सुरक्षित रखने में मदद करती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "helicopter",
+      "lines": [
+        {
+          "text": "This is a helicopter! It can fly up high.",
+          "lang": "en"
+        },
+        {
+          "text": "यह हेलीकॉप्टर है! यह ऊँचा उड़ सकता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "city",
+      "lines": [
+        {
+          "text": "Thank you, helpers! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "धन्यवाद, मददगारों! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

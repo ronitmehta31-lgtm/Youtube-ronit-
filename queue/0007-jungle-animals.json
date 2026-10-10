@@ -1,0 +1,107 @@
+{
+  "title": "Learn Jungle Animals for Kids | जंगल के जानवर सीखें",
+  "description": "Lion, elephant, monkey, giraffe and zebra! शेर, हाथी, बंदर, जिराफ़ और ज़ेबरा!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "jungle animals",
+    "wild animals for kids",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "jungle",
+      "lines": [
+        {
+          "text": "Let's go to the jungle!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, जंगल चलें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "lion",
+      "lines": [
+        {
+          "text": "This is a lion! The lion says roar!",
+          "lang": "en"
+        },
+        {
+          "text": "यह शेर है! शेर को जंगल का राजा कहते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "elephant",
+      "lines": [
+        {
+          "text": "This is an elephant! It has a long trunk.",
+          "lang": "en"
+        },
+        {
+          "text": "यह हाथी है! हाथी की सूंड लंबी होती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "monkey",
+      "lines": [
+        {
+          "text": "This is a monkey! The monkey loves to climb.",
+          "lang": "en"
+        },
+        {
+          "text": "यह बंदर है! बंदर पेड़ पर चढ़ता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "giraffe",
+      "lines": [
+        {
+          "text": "This is a giraffe! It has a very long neck.",
+          "lang": "en"
+        },
+        {
+          "text": "यह जिराफ़ है! जिराफ़ की गर्दन बहुत लंबी होती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "zebra",
+      "lines": [
+        {
+          "text": "This is a zebra! It has black and white stripes.",
+          "lang": "en"
+        },
+        {
+          "text": "यह ज़ेबरा है! ज़ेबरा पर काली और सफ़ेद धारियाँ होती हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "safari",
+      "lines": [
+        {
+          "text": "You did it! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "शाबाश! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

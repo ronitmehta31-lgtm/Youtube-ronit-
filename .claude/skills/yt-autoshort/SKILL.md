@@ -50,3 +50,33 @@ Follow the format in `queue/_example.json` exactly:
   "repetitive content" YouTube refuses to monetize. Vary the format: myth vs truth, one deep fact,
   a countdown, a "what would happen if", a comparison.
 - After writing, list the new titles for the user and say how many are now in the queue.
+
+## Kids channel mode (when `made_for_kids` is true in config.json)
+
+The channel teaches toddlers vehicles and animals, in English and Hindi in the same video. These rules
+replace the hook/comment rules above.
+
+- Every item is one scene with **two lines** over the same clip, English first, then Hindi:
+
+  ```json
+  {"search": "cow", "lines": [
+    {"text": "This is a cow! The cow says moo!", "lang": "en"},
+    {"text": "यह गाय है! गाय हमें दूध देती है।", "lang": "hi"}
+  ]}
+  ```
+
+  The renderer picks the voice for each line from `voices` in config.json.
+- First scene: a cheerful intro in both languages ("Let's learn farm animals! चलो खेत के जानवर सीखें!").
+  Last scene: a goodbye in both languages. **Never ask for comments**: they are switched off on
+  made-for-kids videos.
+- 5–6 items per video, one idea each. Short, simple words a 2–5 year old knows. Animal sounds and
+  vehicle sounds ("choo choo", "beep beep") are good. Hindi in natural, everyday Devanagari, not a
+  word-for-word translation.
+- Only say what the clip will reliably show. Do not name colours unless nearly every clip of that
+  thing has that colour (a fire truck is red; a car is not any one colour).
+- `search`: the plain thing name Pixabay will have footage of (`cow`, `fire truck`, `school bus`,
+  `excavator`). Avoid ambiguous words (`crane` → `construction crane`).
+- Title: `English title | हिंदी शीर्षक`, under 70 characters. Description: one friendly line in each
+  language, then hashtags like `#kidslearning #toddlers #hindirhymes`.
+- Mix the week: alternate vehicle and animal videos, and vary the theme (farm, jungle, pets, birds,
+  road, rescue, sky, water, big machines) so no two videos repeat the same items.

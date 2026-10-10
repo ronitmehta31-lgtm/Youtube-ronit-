@@ -1,0 +1,107 @@
+{
+  "title": "Learn Pet Animals for Kids | पालतू जानवर सीखें",
+  "description": "Dog, cat, rabbit, fish and parrot! कुत्ता, बिल्ली, खरगोश, मछली और तोता!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "pet animals",
+    "animal sounds",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "pets",
+      "lines": [
+        {
+          "text": "Let's learn pet animals!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, पालतू जानवर सीखें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "dog",
+      "lines": [
+        {
+          "text": "This is a dog! The dog says woof woof!",
+          "lang": "en"
+        },
+        {
+          "text": "यह कुत्ता है! कुत्ता हमारा अच्छा दोस्त है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "cat",
+      "lines": [
+        {
+          "text": "This is a cat! The cat says meow!",
+          "lang": "en"
+        },
+        {
+          "text": "यह बिल्ली है! बिल्ली बहुत सोती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "rabbit",
+      "lines": [
+        {
+          "text": "This is a rabbit! It has long ears.",
+          "lang": "en"
+        },
+        {
+          "text": "यह खरगोश है! खरगोश के कान लंबे होते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "goldfish",
+      "lines": [
+        {
+          "text": "This is a fish! The fish lives in water.",
+          "lang": "en"
+        },
+        {
+          "text": "यह मछली है! मछली पानी में रहती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "parrot",
+      "lines": [
+        {
+          "text": "This is a parrot! Some parrots can talk!",
+          "lang": "en"
+        },
+        {
+          "text": "यह तोता है! कुछ तोते बोल भी सकते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "puppy",
+      "lines": [
+        {
+          "text": "Great job! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "शाबाश! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

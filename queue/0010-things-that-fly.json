@@ -1,0 +1,107 @@
+{
+  "title": "Things That Fly for Kids | उड़ने वाली चीज़ें",
+  "description": "Airplane, bird, butterfly, hot air balloon and kite! हवाई जहाज़, चिड़िया, तितली, गुब्बारा और पतंग!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "things that fly",
+    "airplane for kids",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "blue sky",
+      "lines": [
+        {
+          "text": "Look up! What can fly?",
+          "lang": "en"
+        },
+        {
+          "text": "ऊपर देखो! क्या-क्या उड़ता है?",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "airplane",
+      "lines": [
+        {
+          "text": "This is an airplane! It flies very high.",
+          "lang": "en"
+        },
+        {
+          "text": "यह हवाई जहाज़ है! यह बहुत ऊँचा उड़ता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "bird flying",
+      "lines": [
+        {
+          "text": "This is a bird! Birds fly with their wings.",
+          "lang": "en"
+        },
+        {
+          "text": "यह चिड़िया है! चिड़िया पंखों से उड़ती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "butterfly",
+      "lines": [
+        {
+          "text": "This is a butterfly! It has pretty wings.",
+          "lang": "en"
+        },
+        {
+          "text": "यह तितली है! तितली के पंख सुंदर होते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "hot air balloon",
+      "lines": [
+        {
+          "text": "This is a hot air balloon! It floats in the sky.",
+          "lang": "en"
+        },
+        {
+          "text": "यह गर्म हवा का गुब्बारा है! यह आसमान में तैरता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "kite",
+      "lines": [
+        {
+          "text": "This is a kite! The wind helps it fly.",
+          "lang": "en"
+        },
+        {
+          "text": "यह पतंग है! हवा से पतंग उड़ती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "clouds",
+      "lines": [
+        {
+          "text": "Bye bye, sky! See you soon!",
+          "lang": "en"
+        },
+        {
+          "text": "टाटा! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

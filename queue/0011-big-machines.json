@@ -1,0 +1,107 @@
+{
+  "title": "Big Machines for Kids | बड़ी मशीनें सीखें",
+  "description": "Excavator, tractor, train, crane and dump truck! खुदाई मशीन, ट्रैक्टर, रेलगाड़ी, क्रेन और डंपर!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "big machines",
+    "construction vehicles for kids",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "construction site",
+      "lines": [
+        {
+          "text": "Let's see big machines!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, बड़ी मशीनें देखें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "excavator",
+      "lines": [
+        {
+          "text": "This is an excavator! It digs big holes.",
+          "lang": "en"
+        },
+        {
+          "text": "यह खुदाई मशीन है! यह बड़े गड्ढे खोदती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "tractor",
+      "lines": [
+        {
+          "text": "This is a tractor! It works on the farm.",
+          "lang": "en"
+        },
+        {
+          "text": "यह ट्रैक्टर है! यह खेत में काम करता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "train",
+      "lines": [
+        {
+          "text": "This is a train! Choo choo!",
+          "lang": "en"
+        },
+        {
+          "text": "यह रेलगाड़ी है! छुक छुक छुक!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "construction crane",
+      "lines": [
+        {
+          "text": "This is a crane! It lifts heavy things.",
+          "lang": "en"
+        },
+        {
+          "text": "यह क्रेन है! यह भारी सामान उठाती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "dump truck",
+      "lines": [
+        {
+          "text": "This is a dump truck! It carries sand and stones.",
+          "lang": "en"
+        },
+        {
+          "text": "यह डंपर है! यह रेत और पत्थर ले जाता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "construction",
+      "lines": [
+        {
+          "text": "Wow, so strong! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "वाह! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

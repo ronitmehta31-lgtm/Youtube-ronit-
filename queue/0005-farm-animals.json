@@ -1,0 +1,107 @@
+{
+  "title": "Learn Farm Animals for Kids | खेत के जानवर सीखें",
+  "description": "Meet the cow, duck, horse, sheep and hen! गाय, बत्तख, घोड़ा, भेड़ और मुर्गी से मिलिए!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "farm animals",
+    "animal sounds",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "farm",
+      "lines": [
+        {
+          "text": "Let's learn farm animals!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, खेत के जानवर सीखें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "cow",
+      "lines": [
+        {
+          "text": "This is a cow! The cow says moo!",
+          "lang": "en"
+        },
+        {
+          "text": "यह गाय है! गाय हमें दूध देती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "duck",
+      "lines": [
+        {
+          "text": "This is a duck! The duck says quack quack!",
+          "lang": "en"
+        },
+        {
+          "text": "यह बत्तख है! बत्तख पानी में तैरती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "horse",
+      "lines": [
+        {
+          "text": "This is a horse! The horse says neigh!",
+          "lang": "en"
+        },
+        {
+          "text": "यह घोड़ा है! घोड़ा बहुत तेज़ दौड़ता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "sheep",
+      "lines": [
+        {
+          "text": "This is a sheep! The sheep says baa!",
+          "lang": "en"
+        },
+        {
+          "text": "यह भेड़ है! भेड़ के बालों से ऊन बनती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "hen",
+      "lines": [
+        {
+          "text": "This is a hen! The hen says cluck cluck!",
+          "lang": "en"
+        },
+        {
+          "text": "यह मुर्गी है! मुर्गी अंडे देती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "farm",
+      "lines": [
+        {
+          "text": "Great job! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "शाबाश! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

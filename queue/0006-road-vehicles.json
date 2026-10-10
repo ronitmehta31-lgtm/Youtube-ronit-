@@ -1,0 +1,107 @@
+{
+  "title": "Learn Vehicles for Kids | गाड़ियों के नाम सीखें",
+  "description": "Car, bus, motorcycle, bicycle and truck! कार, बस, मोटरसाइकिल, साइकिल और ट्रक!\n\n#kidslearning #toddlers #learnhindi #shorts",
+  "tags": [
+    "vehicles for kids",
+    "vehicle names",
+    "kids learning",
+    "toddler learning",
+    "learn english",
+    "learn hindi",
+    "hindi for kids",
+    "preschool"
+  ],
+  "scenes": [
+    {
+      "search": "traffic",
+      "lines": [
+        {
+          "text": "Let's learn vehicles!",
+          "lang": "en"
+        },
+        {
+          "text": "चलो, गाड़ियों के नाम सीखें!",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "car",
+      "lines": [
+        {
+          "text": "This is a car! The car goes beep beep!",
+          "lang": "en"
+        },
+        {
+          "text": "यह कार है! कार सड़क पर चलती है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "bus",
+      "lines": [
+        {
+          "text": "This is a bus! Lots of people ride the bus.",
+          "lang": "en"
+        },
+        {
+          "text": "यह बस है! बस में बहुत सारे लोग बैठते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "motorcycle",
+      "lines": [
+        {
+          "text": "This is a motorcycle! Vroom vroom!",
+          "lang": "en"
+        },
+        {
+          "text": "यह मोटरसाइकिल है! इसके दो पहिये होते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "bicycle",
+      "lines": [
+        {
+          "text": "This is a bicycle! Ring ring!",
+          "lang": "en"
+        },
+        {
+          "text": "यह साइकिल है! साइकिल को पैरों से चलाते हैं।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "truck",
+      "lines": [
+        {
+          "text": "This is a truck! The truck carries big things.",
+          "lang": "en"
+        },
+        {
+          "text": "यह ट्रक है! ट्रक भारी सामान ले जाता है।",
+          "lang": "hi"
+        }
+      ]
+    },
+    {
+      "search": "road",
+      "lines": [
+        {
+          "text": "Well done! Bye bye!",
+          "lang": "en"
+        },
+        {
+          "text": "बहुत बढ़िया! फिर मिलेंगे!",
+          "lang": "hi"
+        }
+      ]
+    }
+  ]
+}

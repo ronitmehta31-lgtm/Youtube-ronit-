@@ -1,5 +1,5 @@
 {
-  "niche": "",
+  "niche": "learn vehicles and animals for toddlers, English + Hindi in every video",
   "candidate_niches": [
     "space facts",
     "psychology facts",
@@ -12,11 +12,16 @@
     "ocean mysteries",
     "life hacks"
   ],
-  "voice": "en-US-AndrewNeural",
-  "voice_rate": "+8%",
+  "voice": "en-IN-NeerjaNeural",
+  "voices": {
+    "en": "en-IN-NeerjaNeural",
+    "hi": "hi-IN-SwaraNeural"
+  },
+  "voice_rate": "-8%",
+  "words_per_caption": 2,
   "privacy": "private",
   "publish_hour_utc": 14,
-  "made_for_kids": false,
+  "made_for_kids": true,
   "contains_synthetic_media": false,
   "category_id": "27",
   "music_volume": 0.12,
