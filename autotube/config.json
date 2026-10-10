@@ -25,5 +25,10 @@
   "contains_synthetic_media": false,
   "category_id": "24",
   "music_volume": 0.12,
-  "videos_per_run": 1
+  "videos_per_run": 1,
+  "channel": {
+    "name": "Kahani Ghar",
+    "name_hi": "कहानी घर",
+    "tagline_hi": "हर दिन एक नई कहानी"
+  }
 }
