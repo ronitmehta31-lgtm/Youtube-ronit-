@@ -148,5 +148,16 @@
       "text": "दोस्तों, आपके बचपन में भी क्या कोई ऐसी डरावनी कहानी थी, जो बाद में कुछ और ही निकली? अगर कहानी पसंद आई हो, तो वीडियो को लाइक कीजिए, और ऐसी ही कहानियों के लिए चैनल को सब्सक्राइब ज़रूर कीजिए।",
       "image": "a loving elderly Indian grandmother with silver hair, wearing a green cotton saree and silver bangles smiling on a rooftop at sunset with a cat beside her, village in the background, nostalgic"
     }
-  ]
+  ],
+  "youtube": {
+    "id": "Aoa64r3CEmY",
+    "url": "https://youtu.be/Aoa64r3CEmY",
+    "privacy": "private",
+    "publish_at": null
+  },
+  "youtube_short": {
+    "id": "YoXXrhnBSyk",
+    "url": "https://youtube.com/shorts/YoXXrhnBSyk",
+    "privacy": "private"
+  }
 }
