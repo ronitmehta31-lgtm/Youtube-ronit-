@@ -1,0 +1,38 @@
+name: Find a niche
+
+on:
+  workflow_dispatch:
+    inputs:
+      niches:
+        description: 'Niches to compare, separated by commas (blank = the list in autotube/config.json)'
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Scan YouTube
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          NICHES: ${{ github.event.inputs.niches }}
+        run: |
+          IFS=',' read -ra LIST <<< "$NICHES"
+          TRIMMED=()
+          for n in "${LIST[@]}"; do n="$(echo "$n" | xargs)"; [ -n "$n" ] && TRIMMED+=("$n"); done
+          python -m autotube.niche "${TRIMMED[@]}"
+          cat reports/niches-latest.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Save the report
+        run: |
+          git config user.name "autotube-bot"
+          git config user.email "autotube-bot@users.noreply.github.com"
+          git add reports
+          git diff --cached --quiet || (git commit -m "Niche report $(date -u +%F)" && git push)

@@ -1,0 +1,24 @@
+{
+  "niche": "",
+  "candidate_niches": [
+    "space facts",
+    "psychology facts",
+    "history mysteries",
+    "animal facts",
+    "money tips for beginners",
+    "ai tools",
+    "motivation",
+    "body facts",
+    "ocean mysteries",
+    "life hacks"
+  ],
+  "voice": "en-US-AndrewNeural",
+  "voice_rate": "+8%",
+  "privacy": "private",
+  "publish_hour_utc": 14,
+  "made_for_kids": false,
+  "contains_synthetic_media": false,
+  "category_id": "27",
+  "music_volume": 0.12,
+  "videos_per_run": 1
+}

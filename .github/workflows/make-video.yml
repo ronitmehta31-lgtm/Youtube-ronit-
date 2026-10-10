@@ -1,0 +1,47 @@
+name: Make and upload a Short
+
+on:
+  schedule:
+    - cron: "17 13 * * *"   # every day at 13:17 UTC (6:47 pm IST); change as you like
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: make-video
+  cancel-in-progress: false
+
+jobs:
+  make:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ffmpeg and fonts
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+      - run: pip install -r requirements.txt
+      - name: Render and upload
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: python -m autotube.run
+      - name: Keep the video as a downloadable file
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos
+          path: out/*.mp4
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Move finished scripts from queue/ to done/
+        run: |
+          git config user.name "autotube-bot"
+          git config user.email "autotube-bot@users.noreply.github.com"
+          git add -A queue done
+          git diff --cached --quiet || (git commit -m "Uploaded: $(ls -t done | head -1)" && git push)

@@ -1,0 +1,10 @@
+{
+  "title": "Short title, under 60 characters, no clickbait lies",
+  "description": "One or two sentences about the video.\n\n#shorts #topic",
+  "tags": ["topic", "related topic"],
+  "scenes": [
+    {"text": "The hook: the first line people hear. Make it surprising.", "search": "stock footage keywords"},
+    {"text": "Each scene is one or two spoken sentences.", "search": "what should be on screen"},
+    {"text": "End with a payoff or a question that makes people comment.", "search": "closing shot keywords"}
+  ]
+}
