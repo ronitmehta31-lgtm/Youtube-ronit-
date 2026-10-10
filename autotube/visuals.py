@@ -14,7 +14,11 @@ PIXABAY = "https://pixabay.com/api/videos/"
 PEXELS = "https://api.pexels.com/videos/search"
 COMMONS = "https://commons.wikimedia.org/w/api.php"
 USER_AGENT = "autotube/1.0 (personal YouTube Shorts tool; https://github.com/ronitmehta31-lgtm/Youtube-ronit-)"
-SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg)\b", re.I)
+SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg|fig|plate|"
+                         r"drawing|illustration|engraving|painting|sketch|yacht|ship|boat|for sale|market|food|dish|"
+                         r"restaurant|menu|poster|book|page|scan|museum|specimen|preserved|stuffed|statue|toy)\b", re.I)
+# Commons search operators: leave out artwork and old scans.
+SEARCH_EXCLUDE = "-drawing -illustration -engraving -painting -lithograph -plate"
 OK_LICENSES = re.compile(r"^(cc0|public domain|pd|cc by(-sa)?( \d\.\d)?)", re.I)
 
 
@@ -79,7 +83,7 @@ def commons_photo(query, out_path, used_ids):
     try:
         r = requests.get(COMMONS, headers={"User-Agent": USER_AGENT}, timeout=30, params={
             "action": "query", "format": "json", "generator": "search", "gsrnamespace": 6,
-            "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": 20, "prop": "imageinfo",
+            "gsrsearch": f"{query} filetype:bitmap filemime:image/jpeg {SEARCH_EXCLUDE}", "gsrlimit": 20, "prop": "imageinfo",
             "iiprop": "url|size|mime|extmetadata", "iiurlwidth": 1600,
             "iiextmetadatafilter": "Artist|LicenseShortName",
         })
@@ -91,7 +95,8 @@ def commons_photo(query, out_path, used_ids):
             licence = plain(meta.get("LicenseShortName", {}).get("value"))
             if (("commons", page["pageid"]) in used_ids or info.get("mime") not in ("image/jpeg", "image/png")
                     or info.get("width", 0) < 900 or info.get("height", 0) < 700
-                    or SKIP_TITLES.search(page["title"]) or not OK_LICENSES.match(licence)):
+                    or SKIP_TITLES.search(page["title"]) or not OK_LICENSES.match(licence)
+                    or not any(w.lower() in page["title"].lower() for w in query.split()[:1])):
                 continue
             download(info.get("thumburl") or info["url"], out_path)
             used_ids.add(("commons", page["pageid"]))
