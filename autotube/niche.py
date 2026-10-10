@@ -71,7 +71,7 @@ def scan(niche, days=30):
     views = [r["views"] for r in rows]
     small_hits = sum(1 for r in rows if r["subs"] < SMALL_CHANNEL and r["views"] >= BIG_HIT)
     median_views = statistics.median(views)
-    median_multiple = statistics.median(r["multiple"] for r in rows)
+    median_multiple = round(statistics.median(r["multiple"] for r in rows), 1)
     # Demand (how many views the niche gets) + opportunity (small channels breaking through).
     score = round(10 * math.log10(max(median_views, 1)) + 3 * small_hits + 2 * min(median_multiple, 25), 1)
     return {

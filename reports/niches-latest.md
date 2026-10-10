@@ -8,9 +8,9 @@ Last 30 days of Shorts. **Small hits** = videos with 100k+ views from channels u
 | 2 | animal facts | 189.3 | 1,107,570 | 28 | 22.45x |
 | 3 | space facts | 174.0 | 184,348 | 33 | 11.15x |
 | 4 | psychology facts | 173.0 | 142,675 | 34 | 9.75x |
-| 5 | history mysteries | 159.1 | 239,224 | 28 | 10.649999999999999x |
+| 5 | history mysteries | 159.1 | 239,224 | 28 | 10.6x |
 | 6 | life hacks | 123.6 | 1,108,320 | 16 | 7.6x |
-| 7 | body facts | 89.5 | 83,523 | 12 | 2.1500000000000004x |
+| 7 | body facts | 89.5 | 83,523 | 12 | 2.1x |
 | 8 | ai tools | 75.8 | 19,647 | 8 | 4.45x |
 | 9 | ocean mysteries | 48.8 | 9,534 | 1 | 3.0x |
 | 10 | money tips for beginners | 42.5 | 5,406 | 1 | 1.1x |
