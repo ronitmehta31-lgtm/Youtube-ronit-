@@ -67,6 +67,9 @@ def upload(video_path, script, config):
                                    "X-Upload-Content-Type": "video/mp4",
                                    "X-Upload-Content-Length": str(size)},
                           data=json.dumps(body), timeout=60)
+    if "youtubeSignupRequired" in start.text:
+        raise RuntimeError("The Google account you logged in with has no YouTube channel. Run get_token.py again "
+                           "and pick the channel itself in the account chooser, then update YT_REFRESH_TOKEN.")
     if start.status_code != 200:
         raise RuntimeError(f"upload rejected ({start.status_code}): {start.text[:500]}")
     with open(video_path, "rb") as f:
