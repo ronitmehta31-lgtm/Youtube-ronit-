@@ -76,4 +76,5 @@ def upload(video_path, script, config):
     if done.status_code not in (200, 201):
         raise RuntimeError(f"upload failed ({done.status_code}): {done.text[:500]}")
     video = done.json()
+    print(f"  channel: {video['snippet'].get('channelTitle')}")
     return video["id"], video["status"].get("privacyStatus"), status.get("publishAt")
