@@ -50,4 +50,4 @@ jobs:
           git config user.name "autotube-bot"
           git config user.email "autotube-bot@users.noreply.github.com"
           git add -A queue done
-          git diff --cached --quiet || (git commit -m "Uploaded: $(ls -t done | head -1)" && git push)
+          git diff --cached --quiet || (git commit -m "Uploaded: $(ls -t done | head -1)" && git pull --rebase origin "$GITHUB_REF_NAME" && git push)
