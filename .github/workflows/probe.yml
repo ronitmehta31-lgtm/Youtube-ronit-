@@ -1,0 +1,17 @@
+name: Check services
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Try one free AI picture
+        run: |
+          for i in 1 2; do
+            curl -s -o img.jpg -w "pollinations: HTTP %{http_code}, %{size_download} bytes, %{time_total}s, %{content_type}\n" \
+              --max-time 180 "https://image.pollinations.ai/prompt/an%20old%20indian%20woman%20in%20a%20village%2C%20storybook%20illustration?width=1920&height=1080&seed=$i&model=flux&nologo=true&referrer=autotube"
+            head -c 300 img.jpg | grep -a -v "JFIF" | head -c 300; echo
+          done
