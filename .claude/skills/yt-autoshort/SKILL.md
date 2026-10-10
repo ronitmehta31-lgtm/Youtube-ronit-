@@ -38,7 +38,7 @@ Follow the format in `queue/_example.json` exactly:
   - Each scene is 1–2 short spoken sentences. Write for the ear: numbers as people say them.
   - The last scene gives the payoff or asks a question people will answer in the comments.
   - `search`: 2–4 concrete, filmable words for stock-footage search ("ocean waves aerial", not
-    "the concept of time"). Pexels has generic footage: people, nature, cities, space, animals, food,
+    "the concept of time"). Pixabay has generic footage: people, nature, cities, space, animals, food,
     technology. Pick shots that exist.
 
 ## Rules

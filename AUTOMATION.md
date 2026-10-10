@@ -2,18 +2,23 @@
 
 ```
 Find a niche  ->  Claude writes scripts  ->  GitHub makes the video  ->  GitHub uploads it
-(YouTube API)     (/yt-autoshort -> queue/)   (free voice + Pexels + ffmpeg)   (every day, on a schedule)
+(YouTube API)     (/yt-autoshort -> queue/)   (free voice + Pixabay + ffmpeg)   (every day, on a schedule)
 ```
 
 Everything here is free: GitHub Actions runs it, Microsoft Edge's online voices read the script,
-Pexels supplies the footage, and the YouTube Data API does the research and the upload. The only
+Pixabay supplies the footage, and the YouTube Data API does the research and the upload. The only
 part that uses Claude is writing the scripts, which runs on your existing Claude plan.
 
 ## One-time setup (about 30 minutes)
 
-### 1. Pexels key (stock footage) — 2 minutes
-1. Sign up at <https://www.pexels.com/api/> and click **Your API Key**.
-2. Copy the key. Without it, videos still render, on coloured gradient backgrounds instead of footage.
+### 1. Pixabay key (stock footage) — 2 minutes
+1. Sign up for free at <https://pixabay.com/accounts/register/> and confirm your email.
+2. While logged in, open <https://pixabay.com/api/docs/>. Your key is shown in the **Parameters**
+   table, next to `key`, highlighted in green. Copy it.
+3. Without a key, videos still render, on coloured gradient backgrounds instead of footage.
+
+(Pexels also works as a backup source if you already have a Pexels key; add it as `PEXELS_API_KEY`.
+Pexels has paused new keys for now.)
 
 ### 2. Google Cloud project (research + upload) — 15 minutes
 1. Go to <https://console.cloud.google.com/>, sign in with the Google account that owns your channel,
@@ -47,7 +52,7 @@ Repo → **Settings → Secrets and variables → Actions → New repository sec
 
 | name | from |
 |---|---|
-| `PEXELS_API_KEY` | step 1 |
+| `PIXABAY_API_KEY` | step 1 |
 | `YT_API_KEY` | step 2.3 |
 | `YT_CLIENT_ID` | step 3 |
 | `YT_CLIENT_SECRET` | step 3 |
@@ -124,5 +129,5 @@ you have the rights to.
 | part | free now | paid upgrade |
 |---|---|---|
 | voice | Edge voices | ElevenLabs (more natural, about $5–22/month) |
-| footage | Pexels stock | AI-generated clips or images |
+| footage | Pixabay stock | AI-generated clips or images |
 | scripts | Claude writes them when you ask | a weekly scheduled Claude routine that fills the queue on its own (runs on your Claude plan) |
