@@ -55,8 +55,8 @@ def pexels_candidates(query, key):
 
 
 def stock_video(query, out_path, min_seconds, used_ids):
-    sources = [(pixabay_candidates, os.environ.get("PIXABAY_API_KEY")),
-               (pexels_candidates, os.environ.get("PEXELS_API_KEY"))]
+    sources = [(pixabay_candidates, os.environ.get("PIXABAY_API_KEY", "").strip()),
+               (pexels_candidates, os.environ.get("PEXELS_API_KEY", "").strip())]
     for search, key in sources:
         if not key:
             continue

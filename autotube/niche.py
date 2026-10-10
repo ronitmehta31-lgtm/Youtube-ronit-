@@ -23,7 +23,7 @@ BIG_HIT = 100_000  # views
 
 
 def get(endpoint, **params):
-    params["key"] = os.environ.get("YT_API_KEY")
+    params["key"] = os.environ.get("YT_API_KEY", "").strip()
     if not params["key"]:
         sys.exit("YT_API_KEY is missing. Add it under GitHub Settings -> Secrets and variables -> Actions.")
     r = requests.get(f"{API}/{endpoint}", params=params, timeout=30)

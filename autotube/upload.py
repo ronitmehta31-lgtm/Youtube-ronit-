@@ -14,14 +14,14 @@ UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
 
 
 def has_credentials():
-    return all(os.environ.get(k) for k in ("YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN"))
+    return all(os.environ.get(k, "").strip() for k in ("YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN"))
 
 
 def access_token():
     r = requests.post(TOKEN_URL, data={
-        "client_id": os.environ["YT_CLIENT_ID"],
-        "client_secret": os.environ["YT_CLIENT_SECRET"],
-        "refresh_token": os.environ["YT_REFRESH_TOKEN"],
+        "client_id": os.environ["YT_CLIENT_ID"].strip(),
+        "client_secret": os.environ["YT_CLIENT_SECRET"].strip(),
+        "refresh_token": os.environ["YT_REFRESH_TOKEN"].strip(),
         "grant_type": "refresh_token",
     }, timeout=30)
     if r.status_code != 200:
