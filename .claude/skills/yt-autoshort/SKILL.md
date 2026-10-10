@@ -80,3 +80,21 @@ replace the hook/comment rules above.
   language, then hashtags like `#kidslearning #toddlers #hindirhymes`.
 - Mix the week: alternate vehicle and animal videos, and vary the theme (farm, jungle, pets, birds,
   road, rescue, sky, water, big machines) so no two videos repeat the same items.
+
+## Story channel mode (when scripts use `"format": "long"`)
+
+The channel now posts Hindi family/moral stories (हिंदी कहानी): one 7–9 minute video a day plus a Short
+teaser cut from it. Copy the structure of `queue/0012-maa-ka-achaar.json` exactly.
+
+- 25–36 scenes, 750–1,000 Hindi words. Each scene: `text` (2–3 spoken sentences, natural everyday Hindi in
+  Devanagari, numbers written as words) and `image` (an English picture prompt).
+- Scene 1 is the hook: the most dramatic moment and a promise ("और आख़िर में जो हुआ…"). The last scene gives
+  the lesson, then asks for a like and subscribe.
+- Characters: describe each one once (age, hair, clothes) and paste the same description into every
+  `image` prompt they appear in, so the pictures stay consistent. The shared `style` is appended automatically.
+- `thumbnail`: `{"scene": 0, "text": "<4–6 word Hindi hook>"}`. No emoji in thumbnail text.
+- `short`: a teaser title, 4–5 scene indices that tell the setup and the cliffhanger (they must total under a
+  minute), and the outro line asking viewers to watch the full story on the channel.
+- Rotate story types across the week: family/moral, mystery (never gory), motivational, saas-bahu/relationships,
+  clever-wit, 90s village memories, folk tales/kings. Original plots only; never retell a famous film or another
+  channel's story. No real people.
