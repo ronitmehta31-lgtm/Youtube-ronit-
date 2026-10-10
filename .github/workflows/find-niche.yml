@@ -7,6 +7,10 @@ on:
         description: 'Niches to compare, separated by commas (blank = the list in autotube/config.json)'
         required: false
         default: ""
+      long:
+        description: "Scan long videos (4-20 min) instead of Shorts"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -24,11 +28,12 @@ jobs:
         env:
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
           NICHES: ${{ github.event.inputs.niches }}
+          LONG: ${{ inputs.long && '--long' || '' }}
         run: |
           IFS=',' read -ra LIST <<< "$NICHES"
           TRIMMED=()
           for n in "${LIST[@]}"; do n="$(echo "$n" | xargs)"; [ -n "$n" ] && TRIMMED+=("$n"); done
-          python -m autotube.niche "${TRIMMED[@]}"
+          python -m autotube.niche $LONG "${TRIMMED[@]}"
           cat reports/niches-latest.md >> "$GITHUB_STEP_SUMMARY"
       - name: Save the report
         run: |

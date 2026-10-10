@@ -5,6 +5,7 @@ Each niche costs about 102 quota units (the free daily quota is 10,000).
 
     python -m autotube.niche                      # niches from config.json
     python -m autotube.niche "chess tips" "car facts"
+    python -m autotube.niche --long "horror stories"   # 4-20 minute videos instead of Shorts
 """
 import datetime as dt
 import json
@@ -37,9 +38,10 @@ def chunks(items, n=50):
         yield items[i:i + n]
 
 
-def scan(niche, days=30):
+def scan(niche, days=30, long=False):
     since = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    found = get("search", part="id", q=f"{niche} #shorts", type="video", videoDuration="short",
+    found = get("search", part="id", q=niche if long else f"{niche} #shorts", type="video",
+                videoDuration="medium" if long else "short",
                 order="viewCount", publishedAfter=since, maxResults=50)
     ids = [it["id"]["videoId"] for it in found.get("items", [])]
     if not ids:
@@ -61,7 +63,7 @@ def scan(niche, days=30):
         rows.append({
             "title": v["snippet"]["title"],
             "channel": v["snippet"]["channelTitle"],
-            "url": f"https://youtube.com/shorts/{v['id']}",
+            "url": f"https://youtube.com/{'watch?v=' if long else 'shorts/'}{v['id']}",
             "views": views,
             "subs": s,
             "multiple": round(views / max(s, 1000), 1),
@@ -87,11 +89,13 @@ def scan(niche, days=30):
 
 def main(argv):
     config = json.loads((ROOT / "autotube" / "config.json").read_text())
+    long = "--long" in argv
+    argv = [a for a in argv if a != "--long"]
     niches = argv or config["candidate_niches"]
     results = []
     for n in niches:
         print(f"scanning: {n}", flush=True)
-        r = scan(n)
+        r = scan(n, long=long)
         if r:
             results.append(r)
     results.sort(key=lambda r: r["score"], reverse=True)
@@ -102,7 +106,7 @@ def main(argv):
     (out / "niches-latest.json").write_text(json.dumps(results, indent=2))
 
     lines = [f"# Niche report, {today}", "",
-             "Last 30 days of Shorts. **Small hits** = videos with 100k+ views from channels under 100k "
+             f"Last 30 days of {'4-20 minute videos' if long else 'Shorts'}. **Small hits** = videos with 100k+ views from channels under 100k "
              "subscribers. **Multiple** = views divided by the channel's subscriber count.", "",
              "| rank | niche | score | median views | small hits | median multiple |",
              "|---|---|---|---|---|---|"]
