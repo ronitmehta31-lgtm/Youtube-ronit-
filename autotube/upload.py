@@ -11,6 +11,7 @@ import requests
 
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
+THUMBNAIL_URL = "https://www.googleapis.com/upload/youtube/v3/thumbnails/set"
 
 
 def has_credentials():
@@ -38,14 +39,14 @@ def next_publish_time(hour_utc):
     return when.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def upload(video_path, script, config):
+def upload(video_path, script, config, short=True):
     title = script["title"]
-    if "#shorts" not in title.lower() and len(title) <= 92:
+    if short and "#shorts" not in title.lower() and len(title) <= 92:
         title += " #shorts"
     status = {
         "privacyStatus": config["privacy"],
-        "selfDeclaredMadeForKids": config["made_for_kids"],
-        "containsSyntheticMedia": config["contains_synthetic_media"],
+        "selfDeclaredMadeForKids": script.get("made_for_kids", config["made_for_kids"]),
+        "containsSyntheticMedia": script.get("contains_synthetic_media", config["contains_synthetic_media"]),
     }
     if config["privacy"] == "scheduled":
         status["privacyStatus"] = "private"
@@ -81,3 +82,17 @@ def upload(video_path, script, config):
     video = done.json()
     print(f"  channel: {video['snippet'].get('channelTitle')}")
     return video["id"], video["status"].get("privacyStatus"), status.get("publishAt")
+
+
+def set_thumbnail(video_id, image_path):
+    """Set a custom thumbnail. Needs a phone-verified channel; failure is reported, not fatal."""
+    with open(image_path, "rb") as f:
+        r = requests.post(THUMBNAIL_URL, params={"videoId": video_id}, data=f, timeout=120,
+                          headers={"Authorization": f"Bearer {access_token()}", "Content-Type": "image/jpeg"})
+    if r.status_code == 200:
+        print("  thumbnail set")
+        return True
+    print(f"  thumbnail not set ({r.status_code}): {r.text[:300]}")
+    if r.status_code == 403:
+        print("  -> verify the channel with a phone number at https://www.youtube.com/verify to allow custom thumbnails")
+    return False

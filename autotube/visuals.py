@@ -1,5 +1,7 @@
-"""Free visuals for each scene, best first:
+"""Free visuals for each scene.
 
+Scenes with an "image" prompt get an AI illustration from Pollinations (free, no key).
+Scenes with a "search" phrase get, best first:
 1. Pixabay stock video (needs PIXABAY_API_KEY)
 2. Pexels stock video (needs PEXELS_API_KEY)
 3. Wikimedia Commons photo (no key needed; credited in the video description)
@@ -7,12 +9,15 @@
 import html
 import os
 import re
+import time
+from urllib.parse import quote
 
 import requests
 
 PIXABAY = "https://pixabay.com/api/videos/"
 PEXELS = "https://api.pexels.com/videos/search"
 COMMONS = "https://commons.wikimedia.org/w/api.php"
+POLLINATIONS = "https://image.pollinations.ai/prompt/"
 USER_AGENT = "autotube/1.0 (personal YouTube Shorts tool; https://github.com/ronitmehta31-lgtm/Youtube-ronit-)"
 SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg|fig|plate|"
                          r"drawing|illustration|engraving|painting|sketch|yacht|ship|boat|for sale|market|food|dish|"
@@ -107,8 +112,31 @@ def commons_photo(query, out_path, used_ids):
     return None
 
 
-def fetch_visual(query, work, index, min_seconds, used_ids):
+def ai_image(prompt, out_path, width, height, seed):
+    """Generate an illustration with Pollinations. Returns True on success."""
+    params = {"width": width, "height": height, "seed": seed, "model": "flux", "nologo": "true",
+              "private": "true", "referrer": "autotube"}
+    for attempt in range(6):
+        try:
+            r = requests.get(POLLINATIONS + quote(prompt[:1800], safe=""), params=params, timeout=240,
+                             headers={"User-Agent": USER_AGENT})
+            if r.status_code == 200 and r.headers.get("content-type", "").startswith("image/"):
+                with open(out_path, "wb") as fh:
+                    fh.write(r.content)
+                return True
+            print(f"    ai image attempt {attempt + 1}: HTTP {r.status_code} {r.text[:120]!r}")
+        except requests.RequestException as e:
+            print(f"    ai image attempt {attempt + 1}: {e}")
+        time.sleep(15 * (attempt + 1))  # the free tier is rate limited; back off and retry
+    return False
+
+
+def fetch_visual(query, work, index, min_seconds, used_ids, image_prompt=None, size=(1920, 1080), seed=42):
     """Returns (path, kind, credit). kind is "video", "image" or None (no visual found)."""
+    if image_prompt:
+        art = work / f"a{index}.jpg"
+        if ai_image(image_prompt, art, size[0], size[1], seed):
+            return art, "image", None
     if not query:
         return None, None, None
     clip = work / f"c{index}.mp4"

@@ -1,5 +1,5 @@
 {
-  "niche": "learn vehicles and animals for toddlers, English + Hindi in every video",
+  "niche": "Hindi family and moral stories (hindi kahani), 8-10 minute videos plus a Short teaser",
   "candidate_niches": [
     "space facts",
     "psychology facts",
@@ -12,18 +12,18 @@
     "ocean mysteries",
     "life hacks"
   ],
-  "voice": "en-IN-NeerjaNeural",
+  "voice": "hi-IN-MadhurNeural",
   "voices": {
     "en": "en-IN-NeerjaNeural",
     "hi": "hi-IN-SwaraNeural"
   },
-  "voice_rate": "-8%",
-  "words_per_caption": 2,
+  "voice_rate": "-4%",
+  "words_per_caption": 3,
   "privacy": "private",
   "publish_hour_utc": 14,
-  "made_for_kids": true,
+  "made_for_kids": false,
   "contains_synthetic_media": false,
-  "category_id": "27",
+  "category_id": "24",
   "music_volume": 0.12,
   "videos_per_run": 1
 }
