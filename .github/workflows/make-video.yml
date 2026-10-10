@@ -3,7 +3,12 @@ name: Make and upload a Short
 on:
   schedule:
     - cron: "17 13 * * *"   # every day at 13:17 UTC (6:47 pm IST); change as you like
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: "Upload to YouTube (untick for a preview you can download from this page)"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -31,7 +36,7 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: python -m autotube.run
+        run: python -m autotube.run ${{ (github.event_name == 'workflow_dispatch' && !inputs.upload) && '--no-upload' || '' }}
       - name: Keep the video as a downloadable file
         if: always()
         uses: actions/upload-artifact@v4

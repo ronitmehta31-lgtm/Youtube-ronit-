@@ -62,18 +62,28 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     Path(path).write_text(head + "\n".join(lines) + "\n", encoding="utf-8")
 
 
-def scene_video(clip, seconds, out, colors):
+def scene_video(visual, kind, seconds, out, colors, zoom_in=True):
     common = ["-t", f"{seconds:.3f}", "-an", "-r", str(FPS), "-c:v", "libx264", "-preset", "veryfast",
               "-crf", "23", "-pix_fmt", "yuv420p", str(out)]
-    if clip:
-        run("ffmpeg", "-y", "-stream_loop", "-1", "-i", str(clip),
+    if kind == "video":
+        run("ffmpeg", "-y", "-stream_loop", "-1", "-i", str(visual),
             "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1", *common)
+    elif kind == "image":
+        # Slow "Ken Burns" zoom so a still photo feels like footage; alternate in and out per scene.
+        frames = int(seconds * FPS) + 1
+        zoom = f"1+0.15*on/{frames}" if zoom_in else f"1.15-0.15*on/{frames}"
+        bw, bh = W * 3 // 2, H * 3 // 2  # work larger than the output so the zoom stays smooth
+        run("ffmpeg", "-y", "-i", str(visual), "-vf",
+            f"scale={bw}:{bh}:force_original_aspect_ratio=increase,crop={bw}:{bh},setsar=1,"
+            f"zoompan=z='{zoom}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={frames}:s={W}x{H}:fps={FPS}",
+            "-frames:v", str(frames), *common)
     else:
         run("ffmpeg", "-y", "-f", "lavfi",
             "-i", f"gradients=s={W}x{H}:c0={colors[0]}:c1={colors[1]}:speed=0.008:r={FPS}", *common)
 
 
 def render(script_path, out_path):
+    """Render the video. Returns credit lines for any photos that need attribution."""
     config = json.loads((ROOT / "autotube" / "config.json").read_text())
     script = json.loads(Path(script_path).read_text())
     voice = script.get("voice", config["voice"])
@@ -83,7 +93,7 @@ def render(script_path, out_path):
     work = Path(tempfile.mkdtemp(prefix="autotube-"))
     try:
         all_words, scene_files, audio_files, t = [], [], [], 0.0
-        used_clips = set()
+        used_clips, credits = set(), []
         for i, scene in enumerate(script["scenes"]):
             print(f"  scene {i + 1}/{len(script['scenes'])}: {scene['text'][:60]}")
             mp3 = work / f"s{i}.mp3"
@@ -95,9 +105,11 @@ def render(script_path, out_path):
             run("ffmpeg", "-y", "-i", str(mp3), "-af", f"apad=pad_dur={PAUSE}", "-ar", "44100", "-ac", "2", str(wav))
             audio_files.append(wav)
 
-            clip = work / f"c{i}.mp4"
-            got = visuals.fetch_clip(scene.get("search", ""), clip, seconds, used_clips)
-            scene_video(clip if got else None, seconds, work / f"v{i}.mp4", colors)
+            visual, kind, credit = visuals.fetch_visual(scene.get("search", ""), work, i, seconds, used_clips)
+            print(f"    visual: {kind or 'none, using a gradient'}")
+            if credit and credit not in credits:
+                credits.append(credit)
+            scene_video(visual, kind, seconds, work / f"v{i}.mp4", colors, zoom_in=i % 2 == 0)
             scene_files.append(work / f"v{i}.mp4")
             t += seconds
 
@@ -125,6 +137,7 @@ def render(script_path, out_path):
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         shutil.move(str(work / "final.mp4"), out_path)
         print(f"  rendered {out_path} ({t:.1f}s)")
+        return credits
     except subprocess.CalledProcessError as e:
         sys.exit(f"ffmpeg failed: {e.stderr.decode(errors='replace')[-1500:]}")
     finally:

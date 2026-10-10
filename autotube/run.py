@@ -27,7 +27,9 @@ def main(argv):
         print(f"Making {path.name}")
         script = json.loads(path.read_text())
         out = ROOT / "out" / f"{path.stem}.mp4"
-        render(path, out)
+        credits = render(path, out)
+        if credits:
+            script["description"] = (script.get("description", "") + "\n\nPhotos: " + "; ".join(credits))[:5000]
         if do_upload:
             video_id, privacy, publish_at = upload.upload(out, script, config)
             script["youtube"] = {"id": video_id, "url": f"https://youtube.com/shorts/{video_id}",

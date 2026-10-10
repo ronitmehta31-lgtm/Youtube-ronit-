@@ -1,14 +1,25 @@
-"""Free stock footage: Pixabay (PIXABAY_API_KEY) first, then Pexels (PEXELS_API_KEY) if set."""
+"""Free visuals for each scene, best first:
+
+1. Pixabay stock video (needs PIXABAY_API_KEY)
+2. Pexels stock video (needs PEXELS_API_KEY)
+3. Wikimedia Commons photo (no key needed; credited in the video description)
+"""
+import html
 import os
+import re
 
 import requests
 
 PIXABAY = "https://pixabay.com/api/videos/"
 PEXELS = "https://api.pexels.com/videos/search"
+COMMONS = "https://commons.wikimedia.org/w/api.php"
+USER_AGENT = "autotube/1.0 (personal YouTube Shorts tool; https://github.com/ronitmehta31-lgtm/Youtube-ronit-)"
+SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg)\b", re.I)
+OK_LICENSES = re.compile(r"^(cc0|public domain|pd|cc by(-sa)?( \d\.\d)?)", re.I)
 
 
 def download(url, out_path):
-    with requests.get(url, stream=True, timeout=120) as dl:
+    with requests.get(url, stream=True, timeout=120, headers={"User-Agent": USER_AGENT}) as dl:
         dl.raise_for_status()
         with open(out_path, "wb") as fh:
             for part in dl.iter_content(1 << 20):
@@ -39,10 +50,7 @@ def pexels_candidates(query, key):
             yield ("pexels", video["id"]), pick["link"], video.get("duration", 0), pick["height"] > pick["width"]
 
 
-def fetch_clip(query, out_path, min_seconds, used_ids):
-    """Download a clip for query to out_path. Returns True on success."""
-    if not query:
-        return False
+def stock_video(query, out_path, min_seconds, used_ids):
     sources = [(pixabay_candidates, os.environ.get("PIXABAY_API_KEY")),
                (pexels_candidates, os.environ.get("PEXELS_API_KEY"))]
     for search, key in sources:
@@ -60,3 +68,49 @@ def fetch_clip(query, out_path, min_seconds, used_ids):
         except requests.RequestException as e:
             print(f"  {search.__name__.split('_')[0]} failed for {query!r}: {e}")
     return False
+
+
+def plain(value):
+    return html.unescape(re.sub(r"<[^>]+>", "", value or "")).strip()
+
+
+def commons_photo(query, out_path, used_ids):
+    """Download a freely licensed photo from Wikimedia Commons. Returns a credit line, or None."""
+    try:
+        r = requests.get(COMMONS, headers={"User-Agent": USER_AGENT}, timeout=30, params={
+            "action": "query", "format": "json", "generator": "search", "gsrnamespace": 6,
+            "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": 20, "prop": "imageinfo",
+            "iiprop": "url|size|mime|extmetadata", "iiurlwidth": 1600,
+            "iiextmetadatafilter": "Artist|LicenseShortName",
+        })
+        r.raise_for_status()
+        pages = sorted(r.json().get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 99))
+        for page in pages:
+            info = (page.get("imageinfo") or [{}])[0]
+            meta = info.get("extmetadata", {})
+            licence = plain(meta.get("LicenseShortName", {}).get("value"))
+            if (("commons", page["pageid"]) in used_ids or info.get("mime") not in ("image/jpeg", "image/png")
+                    or info.get("width", 0) < 900 or info.get("height", 0) < 700
+                    or SKIP_TITLES.search(page["title"]) or not OK_LICENSES.match(licence)):
+                continue
+            download(info.get("thumburl") or info["url"], out_path)
+            used_ids.add(("commons", page["pageid"]))
+            author = plain(meta.get("Artist", {}).get("value"))[:80] or "unknown author"
+            return f"{page['title'].removeprefix('File:')} by {author} ({licence}), via Wikimedia Commons"
+    except requests.RequestException as e:
+        print(f"  wikimedia failed for {query!r}: {e}")
+    return None
+
+
+def fetch_visual(query, work, index, min_seconds, used_ids):
+    """Returns (path, kind, credit). kind is "video", "image" or None (no visual found)."""
+    if not query:
+        return None, None, None
+    clip = work / f"c{index}.mp4"
+    if stock_video(query, clip, min_seconds, used_ids):
+        return clip, "video", None
+    photo = work / f"p{index}.img"
+    credit = commons_photo(query, photo, used_ids)
+    if credit:
+        return photo, "image", credit
+    return None, None, None
