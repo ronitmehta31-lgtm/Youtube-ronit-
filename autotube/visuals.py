@@ -1,6 +1,8 @@
 """Free visuals for each scene.
 
-Scenes with an "image" prompt get an AI illustration from Pollinations (free, no key).
+Scenes with an "image" prompt get an AI illustration from the first provider that is set up:
+fal.ai (FAL_KEY, ~$0.006 per picture), Cloudflare Workers AI (CF_ACCOUNT_ID + CF_API_TOKEN, free daily
+allowance), or Pollinations (no key, often overloaded).
 Scenes with a "search" phrase get, best first:
 1. Pixabay stock video (needs PIXABAY_API_KEY)
 2. Pexels stock video (needs PEXELS_API_KEY)
@@ -8,6 +10,7 @@ Scenes with a "search" phrase get, best first:
 """
 import html
 import os
+import base64
 import re
 import time
 from urllib.parse import quote
@@ -18,6 +21,9 @@ PIXABAY = "https://pixabay.com/api/videos/"
 PEXELS = "https://api.pexels.com/videos/search"
 COMMONS = "https://commons.wikimedia.org/w/api.php"
 POLLINATIONS = "https://image.pollinations.ai/prompt/"
+FAL_FLUX = "https://fal.run/fal-ai/flux/schnell"
+CLOUDFLARE_FLUX = "https://api.cloudflare.com/client/v4/accounts/{}/ai/run/@cf/black-forest-labs/flux-1-schnell"
+_ai_failures = 0  # consecutive failures; after a few we stop asking for the rest of the run
 USER_AGENT = "autotube/1.0 (personal YouTube Shorts tool; https://github.com/ronitmehta31-lgtm/Youtube-ronit-)"
 SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg|fig|plate|"
                          r"drawing|illustration|engraving|painting|sketch|yacht|ship|boat|for sale|market|food|dish|"
@@ -112,22 +118,57 @@ def commons_photo(query, out_path, used_ids):
     return None
 
 
+def fal_image(prompt, out_path, width, height, seed, key):
+    r = requests.post(FAL_FLUX, headers={"Authorization": f"Key {key}"}, timeout=180, json={
+        "prompt": prompt, "image_size": {"width": width, "height": height}, "num_inference_steps": 4,
+        "seed": seed, "enable_safety_checker": True})
+    r.raise_for_status()
+    download(r.json()["images"][0]["url"], out_path)
+
+
+def cloudflare_image(prompt, out_path, seed, account, token):
+    r = requests.post(CLOUDFLARE_FLUX.format(account), headers={"Authorization": f"Bearer {token}"}, timeout=180,
+                      json={"prompt": prompt[:2000], "steps": 4, "seed": seed})
+    r.raise_for_status()
+    with open(out_path, "wb") as fh:
+        fh.write(base64.b64decode(r.json()["result"]["image"]))
+
+
+def pollinations_image(prompt, out_path, width, height, seed):
+    r = requests.get(POLLINATIONS + quote(prompt[:1800], safe=""), timeout=90, headers={"User-Agent": USER_AGENT},
+                     params={"width": width, "height": height, "seed": seed, "model": "flux", "nologo": "true",
+                             "private": "true", "referrer": "autotube"})
+    if r.status_code != 200 or not r.headers.get("content-type", "").startswith("image/"):
+        raise requests.HTTPError(f"HTTP {r.status_code} {r.text[:80]!r}")
+    with open(out_path, "wb") as fh:
+        fh.write(r.content)
+
+
 def ai_image(prompt, out_path, width, height, seed):
-    """Generate an illustration with Pollinations. Returns True on success."""
-    params = {"width": width, "height": height, "seed": seed, "model": "flux", "nologo": "true",
-              "private": "true", "referrer": "autotube"}
-    for attempt in range(6):
+    """Generate an illustration with the first configured provider. Returns True on success."""
+    global _ai_failures
+    if _ai_failures >= 3:
+        return False
+    fal = os.environ.get("FAL_KEY", "").strip()
+    cf_account = os.environ.get("CF_ACCOUNT_ID", "").strip()
+    cf_token = os.environ.get("CF_API_TOKEN", "").strip()
+    if fal:
+        name, call = "fal.ai", lambda: fal_image(prompt, out_path, width, height, seed, fal)
+    elif cf_account and cf_token:
+        name, call = "cloudflare", lambda: cloudflare_image(prompt, out_path, seed, cf_account, cf_token)
+    else:
+        name, call = "pollinations", lambda: pollinations_image(prompt, out_path, width, height, seed)
+    for attempt in range(2):
         try:
-            r = requests.get(POLLINATIONS + quote(prompt[:1800], safe=""), params=params, timeout=240,
-                             headers={"User-Agent": USER_AGENT})
-            if r.status_code == 200 and r.headers.get("content-type", "").startswith("image/"):
-                with open(out_path, "wb") as fh:
-                    fh.write(r.content)
-                return True
-            print(f"    ai image attempt {attempt + 1}: HTTP {r.status_code} {r.text[:120]!r}")
-        except requests.RequestException as e:
-            print(f"    ai image attempt {attempt + 1}: {e}")
-        time.sleep(15 * (attempt + 1))  # the free tier is rate limited; back off and retry
+            call()
+            _ai_failures = 0
+            return True
+        except (requests.RequestException, KeyError, ValueError) as e:
+            print(f"    {name} picture attempt {attempt + 1} failed: {str(e)[:200]}")
+            time.sleep(5)
+    _ai_failures += 1
+    if _ai_failures >= 3:
+        print(f"    {name} keeps failing; using fallback visuals for the rest of this video")
     return False
 
 

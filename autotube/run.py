@@ -31,6 +31,10 @@ def main(argv):
             script["description"] = (script.get("description", "") + "\n\nPhotos: " + "; ".join(made["credits"]))[:5000]
         if not do_upload:
             continue
+        if made["missing_visuals"] > 0.25:
+            print(f"  NOT uploading: {made['missing_visuals']:.0%} of scenes have no picture. "
+                  "Check the picture provider keys; the script stays in the queue.")
+            continue
 
         long = script.get("format") == "long"
         video_id, privacy, publish_at = upload.upload(made["main"], script, config, short=not long)

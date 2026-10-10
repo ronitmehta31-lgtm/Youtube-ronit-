@@ -31,6 +31,10 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Render and upload
         env:
+          PYTHONUNBUFFERED: "1"
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}

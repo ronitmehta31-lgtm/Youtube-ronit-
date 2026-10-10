@@ -216,6 +216,7 @@ def render(script_path, out_dir):
     work = Path(tempfile.mkdtemp(prefix="autotube-"))
     try:
         scenes, result["credits"] = prepare(script, config, work, fmt)
+        result["missing_visuals"] = sum(1 for sc in scenes if not sc["visual"]) / len(scenes)
         compose(scenes, fmt, result["main"], work, config, "main")
 
         thumb = script.get("thumbnail")
