@@ -110,7 +110,10 @@ def fetch_visual(query, work, index, min_seconds, used_ids):
     if stock_video(query, clip, min_seconds, used_ids):
         return clip, "video", None
     photo = work / f"p{index}.img"
-    credit = commons_photo(query, photo, used_ids)
-    if credit:
-        return photo, "image", credit
+    words = query.split()
+    # Specific searches often find nothing on Commons, so retry with fewer words.
+    for attempt in dict.fromkeys([query, " ".join(words[:2]), words[0]]):
+        credit = commons_photo(attempt, photo, used_ids)
+        if credit:
+            return photo, "image", credit
     return None, None, None
