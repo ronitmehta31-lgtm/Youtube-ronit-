@@ -30,5 +30,10 @@
     "name": "Kahani Ghar",
     "name_hi": "कहानी घर",
     "tagline_hi": "हर दिन एक नई कहानी"
+  },
+  "animation": {
+    "mode": "hook",
+    "model": "minimax/h3-max-turbo/image-to-video",
+    "hook_seconds": 60
   }
 }

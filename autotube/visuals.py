@@ -24,6 +24,7 @@ POLLINATIONS = "https://image.pollinations.ai/prompt/"
 FAL_FLUX = "https://fal.run/fal-ai/flux/schnell"
 CLOUDFLARE_FLUX = "https://api.cloudflare.com/client/v4/accounts/{}/ai/run/@cf/black-forest-labs/flux-1-schnell"
 _ai_failures = 0  # consecutive failures; after a few we stop asking for the rest of the run
+hosted_urls = {}  # local picture path -> its fal.ai URL, so animation can reuse it without uploading
 USER_AGENT = "autotube/1.0 (personal YouTube Shorts tool; https://github.com/ronitmehta31-lgtm/Youtube-ronit-)"
 SKIP_TITLES = re.compile(r"\b(map|diagram|chart|logo|flag|coat of arms|graph|plot|icon|seal|stamp|text|svg|fig|plate|"
                          r"drawing|illustration|engraving|painting|sketch|yacht|ship|boat|for sale|market|food|dish|"
@@ -123,7 +124,9 @@ def fal_image(prompt, out_path, width, height, seed, key):
         "prompt": prompt, "image_size": {"width": width, "height": height}, "num_inference_steps": 4,
         "seed": seed, "enable_safety_checker": True})
     r.raise_for_status()
-    download(r.json()["images"][0]["url"], out_path)
+    url = r.json()["images"][0]["url"]
+    download(url, out_path)
+    hosted_urls[str(out_path)] = url
 
 
 def cloudflare_image(prompt, out_path, seed, account, token):

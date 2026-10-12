@@ -13,7 +13,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import tts, visuals
+from . import animate, tts, visuals
 
 ROOT = Path(__file__).resolve().parent.parent
 FPS = 30
@@ -87,7 +87,24 @@ def scene_video(visual, kind, seconds, out, fmt, colors, zoom_in=True):
     common = ["-t", f"{seconds:.3f}", "-an", "-r", str(FPS), "-c:v", "libx264", "-preset", "veryfast",
               "-crf", "23", "-pix_fmt", "yuv420p", str(out)]
     zoom = f"1+0.12*on/{frames}" if zoom_in else f"1.12-0.12*on/{frames}"
-    if kind == "video":
+    if kind == "anim":
+        # An AI-animated clip: stretch it gently to the scene length (at most 30% slower), then hold the
+        # last frame for any remaining time. Wide clips in a tall video sit over a blurred copy.
+        clip_len = duration(visual)
+        speed = min(max(seconds / clip_len, 1.0), 1.3)
+        fit = f"setpts={speed:.3f}*PTS,fps={FPS},tpad=stop_mode=clone:stop_duration={max(seconds - clip_len * speed, 0) + 1:.2f}"
+        cw, ch = (int(v) for v in probe(visual, "stream=width,height").split("x"))
+        if fmt == "short" and cw > ch:
+            fw = w
+            run("ffmpeg", "-y", "-i", str(visual), "-filter_complex",
+                f"[0:v]{fit},split[a][b];"
+                f"[a]scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},gblur=sigma=40,"
+                f"eq=brightness=-0.12,setsar=1[bg];[b]scale={fw}:-2,setsar=1[fg];"
+                f"[bg][fg]overlay=(W-w)/2:(H-h)/2-{h // 10}", *common)
+        else:
+            run("ffmpeg", "-y", "-i", str(visual), "-vf",
+                f"{fit},scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1", *common)
+    elif kind == "video":
         run("ffmpeg", "-y", "-stream_loop", "-1", "-i", str(visual),
             "-vf", f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1", *common)
     elif kind == "image":
@@ -143,7 +160,24 @@ def prepare(script, config, work, fmt):
         print(f"    visual: {kind or 'none, using a gradient'}")
         if credit and credit not in credits:
             credits.append(credit)
-        scenes.append({"spoken": spoken, "seconds": seconds, "visual": visual, "kind": kind})
+        scenes.append({"spoken": spoken, "seconds": seconds, "visual": visual, "kind": kind, "prompt": prompt})
+
+    # Optionally bring the pictures to life. "hook" animates roughly the first minute plus the Short's
+    # scenes (where viewers decide to stay); "all" animates every picture.
+    anim = {**{"mode": "off"}, **config.get("animation", {}), **script.get("animation", {})}
+    if fmt == "long" and anim["mode"] in ("hook", "all"):
+        chosen, total = set(), 0.0
+        for i, sc in enumerate(scenes):
+            if anim["mode"] == "all" or total < anim.get("hook_seconds", 60):
+                chosen.add(i)
+            total += sc["seconds"]
+        if anim["mode"] == "hook":
+            chosen |= set((script.get("short") or {}).get("scenes", []))
+        jobs = [(i, scenes[i]["visual"], scenes[i]["prompt"], scenes[i]["seconds"]) for i in sorted(chosen)
+                if scenes[i]["kind"] == "image" and scenes[i]["prompt"]]
+        for i, clip in animate.animate(jobs, anim.get("model", "minimax/h3-max-turbo/image-to-video"), work).items():
+            scenes[i]["still"] = scenes[i]["visual"]
+            scenes[i]["visual"], scenes[i]["kind"] = clip, "anim"
     return scenes, credits
 
 
@@ -221,8 +255,9 @@ def render(script_path, out_dir):
 
         thumb = script.get("thumbnail")
         if fmt == "long" and thumb:
-            picture = scenes[thumb.get("scene", 0)]["visual"]
-            if picture and scenes[thumb.get("scene", 0)]["kind"] == "image":
+            first = scenes[thumb.get("scene", 0)]
+            picture = first.get("still") or first["visual"]
+            if picture and first["kind"] in ("image", "anim"):
                 result["thumbnail"] = out_dir / f"{stem}-thumb.jpg"
                 make_thumbnail(picture, thumb["text"], result["thumbnail"], work)
 
