@@ -136,5 +136,16 @@
       "text": "अगर कहानी अच्छी लगी हो, तो वीडियो को लाइक कीजिए, और ऐसी ही दिल छू लेने वाली कहानियों के लिए चैनल को सब्सक्राइब ज़रूर कीजिए।",
       "image": "a happy village family portrait: a stern Indian mother-in-law about 60 with grey hair in a tight bun, wearing a maroon saree and a big red bindi, a gentle young Indian woman about 25 with a long braid, wearing a simple pink cotton saree and an Indian man about 30 with a neat mustache, wearing a checked shirt in front of their house, warm golden light"
     }
-  ]
+  ],
+  "youtube": {
+    "id": "e3xLE8yH1kI",
+    "url": "https://youtu.be/e3xLE8yH1kI",
+    "privacy": "public",
+    "publish_at": null
+  },
+  "youtube_short": {
+    "id": "qDMehlR_b8A",
+    "url": "https://youtube.com/shorts/qDMehlR_b8A",
+    "privacy": "public"
+  }
 }
