@@ -140,5 +140,16 @@
       "text": "अगर इस कहानी ने आपके दिल को छुआ हो, तो वीडियो को लाइक कीजिए, कमेंट में अपने पापा के लिए कुछ लिखिए, और ऐसी ही कहानियों के लिए चैनल को सब्सक्राइब ज़रूर कीजिए।",
       "image": "a hardworking Indian brick-kiln labourer about 50 with a thin face, grey stubble and a cloth tied on his head, wearing a worn vest sitting proudly on his new bicycle at sunset near the brick kiln, smiling"
     }
-  ]
+  ],
+  "youtube": {
+    "id": "kwYQDYg8ico",
+    "url": "https://youtu.be/kwYQDYg8ico",
+    "privacy": "private",
+    "publish_at": null
+  },
+  "youtube_short": {
+    "id": "VlQ_mpec4uY",
+    "url": "https://youtube.com/shorts/VlQ_mpec4uY",
+    "privacy": "private"
+  }
 }
