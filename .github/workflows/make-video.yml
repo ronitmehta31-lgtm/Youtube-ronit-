@@ -2,7 +2,7 @@ name: Make and upload a Short
 
 on:
   schedule:
-    - cron: "17 13 * * *"   # every day at 13:17 UTC (6:47 pm IST); change as you like
+    - cron: "47 8 * * *"   # 8:47 UTC = 2:17 pm IST; GitHub often starts scheduled runs hours late, so this leaves room
   workflow_dispatch:
     inputs:
       upload:
