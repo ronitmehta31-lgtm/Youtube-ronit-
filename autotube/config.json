@@ -19,7 +19,7 @@
   },
   "voice_rate": "-4%",
   "words_per_caption": 3,
-  "privacy": "private",
+  "privacy": "public",
   "publish_hour_utc": 14,
   "made_for_kids": false,
   "contains_synthetic_media": false,
