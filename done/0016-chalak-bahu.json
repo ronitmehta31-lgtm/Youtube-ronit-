@@ -140,5 +140,16 @@
       "text": "अगर आपको गौरी की चालाकी पसंद आई हो, तो वीडियो को लाइक कीजिए, और ऐसी ही कहानियों के लिए चैनल को सब्सक्राइब ज़रूर कीजिए।",
       "image": "a clever confident young Indian village woman about 24 with a nose ring and a long braid, wearing a green saree and a simple honest Indian farmer about 55 with a white mustache, white dhoti and a small turban standing proudly in their green field near the canal at sunset"
     }
-  ]
+  ],
+  "youtube": {
+    "id": "xLfpXYauSlM",
+    "url": "https://youtu.be/xLfpXYauSlM",
+    "privacy": "public",
+    "publish_at": null
+  },
+  "youtube_short": {
+    "id": "SeNlwx8zQUg",
+    "url": "https://youtube.com/shorts/SeNlwx8zQUg",
+    "privacy": "public"
+  }
 }
