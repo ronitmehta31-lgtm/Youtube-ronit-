@@ -136,5 +136,16 @@
       "text": "अगर इस कहानी ने आपको अपने दादाजी या नानाजी की याद दिला दी हो, तो कमेंट में उनका नाम ज़रूर लिखिए। वीडियो को लाइक कीजिए, और चैनल को सब्सक्राइब ज़रूर कीजिए।",
       "image": "a peaceful mango orchard at golden hour with two mango trees, one big and one small, nostalgic atmosphere"
     }
-  ]
+  ],
+  "youtube": {
+    "id": "I5pFX4nz4Fc",
+    "url": "https://youtu.be/I5pFX4nz4Fc",
+    "privacy": "public",
+    "publish_at": null
+  },
+  "youtube_short": {
+    "id": "ZS8R0gpMpus",
+    "url": "https://youtube.com/shorts/ZS8R0gpMpus",
+    "privacy": "public"
+  }
 }
