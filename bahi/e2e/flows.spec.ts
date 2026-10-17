@@ -67,6 +67,11 @@ test.describe('F01 make a GST invoice and share it', () => {
     expect(decodeURIComponent(url)).toContain('fully paid');
     expect(decodeURIComponent(url)).not.toContain('Balance due');
 
+    const [pdf] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Send PDF' }).click()]);
+    expect(pdf.suggestedFilename()).toBe('Sale-invoice-INV-1.pdf');
+    const head = (await (await import('node:fs/promises')).readFile((await pdf.path())!)).subarray(0, 5).toString();
+    expect(head).toBe('%PDF-');
+
     // Stock went down by 4
     await page.goto('/#/items');
     await expect(page.getByRole('link', { name: /Tea 250g/ })).toContainText('6 Pcs');

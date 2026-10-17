@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowRightLeft, Copy, IndianRupee, MessageCircle, Pencil, Printer, Share2, Trash2, Undo2 } from 'lucide-react';
+import { ArrowRightLeft, Copy, FileDown, IndianRupee, MessageCircle, Pencil, Printer, Share2, Trash2, Undo2 } from 'lucide-react';
 import { useBook } from '../App';
 import { Button, Card, Chip, PageHeader, Select, useToast } from '../components/ui';
 import { InvoiceDoc } from '../components/InvoiceDoc';
@@ -9,6 +9,7 @@ import { payStatus, settledOn, todayStr } from '../lib/ledger';
 import { fmt } from '../lib/money';
 import { txnText, whatsappUrl } from '../lib/share';
 import { TXN, type Prefs } from '../lib/types';
+import { elementToPdf, shareOrDownload } from '../lib/pdf';
 
 export default function TxnView() {
   const b = useBook();
@@ -20,6 +21,8 @@ export default function TxnView() {
   const party = b.parties.find((p) => p.id === t?.partyId);
   const st = useMemo(() => (t && (t.type === 'sale' || t.type === 'purchase') ? payStatus(t, b.txns, todayStr()) : null), [t, b.txns]);
   const due = st?.due ?? 0;
+  const docRef = useRef<HTMLDivElement>(null);
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   useEffect(() => {
     if (sp.get('print') && t) { setSp({}, { replace: true }); setTimeout(() => window.print(), 300); }
@@ -47,6 +50,16 @@ export default function TxnView() {
     toast('Bill text copied');
   };
   const setSize = (s: Prefs['printSize']) => setMeta('prefs', { ...b.prefs, printSize: s });
+  const sendPdf = async () => {
+    if (!docRef.current) return;
+    setPdfBusy(true);
+    try {
+      const file = await elementToPdf(docRef.current, `${meta.label.replace(/\s+/g, '-')}-${t.number || t.date}.pdf`, b.prefs.printSize.startsWith('thermal'));
+      const how = await shareOrDownload(file, text);
+      if (how === 'downloaded') toast('PDF downloaded. Attach it in WhatsApp or email.');
+    } catch (e) { toast('Could not make the PDF: ' + (e as Error).message, 'danger'); }
+    setPdfBusy(false);
+  };
 
   return (
     <>
@@ -66,6 +79,7 @@ export default function TxnView() {
             {meta.hasLines && <Button size="sm" variant="primary" icon={<Printer size={15} />} onClick={() => window.print()}>Print / PDF</Button>}
             {meta.hasLines && <Select aria-label="Paper size" value={b.prefs.printSize} onChange={(e) => setSize(e.target.value as Prefs['printSize'])} className="h-8 w-36 text-[13px]">
               <option value="a4">A4</option><option value="a5">A5</option><option value="thermal80">Thermal 80mm</option><option value="thermal58">Thermal 58mm</option></Select>}
+            {meta.hasLines && <Button size="sm" icon={<FileDown size={15} />} onClick={sendPdf} disabled={pdfBusy}>{pdfBusy ? 'Making PDF…' : 'Send PDF'}</Button>}
             <Button size="sm" icon={<MessageCircle size={15} />} onClick={() => window.open(whatsappUrl(phone, text), '_blank')}>WhatsApp</Button>
             <Button size="sm" icon={<Share2 size={15} />} onClick={share}>Share</Button>
             {st && due > 0 && <Button size="sm" icon={<IndianRupee size={15} />} onClick={() => nav(`/${t.type === 'sale' ? 'sale' : 'purchase'}/payments/new?party=${t.partyId ?? ''}&invoice=${t.id}`)}>
@@ -91,7 +105,7 @@ export default function TxnView() {
         </Card>
       </div>
       {meta.hasLines ? (
-        <div className="overflow-x-auto rounded-lg border border-border bg-white shadow-card print:border-0 print:shadow-none">
+        <div ref={docRef} className="overflow-x-auto rounded-lg border border-border bg-white shadow-card print:border-0 print:shadow-none">
           <InvoiceDoc t={t} firm={b.firm} party={party} prefs={b.prefs} due={due} />
         </div>
       ) : (

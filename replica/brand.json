@@ -1,0 +1,6 @@
+{
+  "name": "Bahi",
+  "avoid": ["Vyapar", "vyaparapp", "Simply Vyapar"],
+  "domains": ["vyaparapp.in", "vyapar.com", "vypcdn.in"],
+  "colors": ["#ED1A3B", "#E41D33", "#097AA8", "#1789FC"]
+}
