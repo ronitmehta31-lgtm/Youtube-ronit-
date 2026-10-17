@@ -98,3 +98,21 @@ teaser cut from it. Copy the structure of `queue/0012-maa-ka-achaar.json` exactl
 - Rotate story types across the week: family/moral, mystery (never gory), motivational, saas-bahu/relationships,
   clever-wit, 90s village memories, folk tales/kings. Original plots only; never retell a famous film or another
   channel's story. No real people.
+
+## English twist-Shorts mode (current channel format, overrides the modes above)
+
+The channel now posts only English first-person twist stories as Shorts, modelled on "Watch Closely 🚽"
+by His Story (10M views): an "I…" story, a shocking first line, fast escalation, and a punchline twist.
+Copy the structure of `queue/0019b-poison-sign.json` exactly; generate files with
+`queue/NNNNb-slug.json`, continuing the highest number across `queue/`, `done/` and `archive/`.
+
+- 90–135 words in 7–8 scenes (≈45–55 seconds at the +8% voice rate). Scene 1 is the hook, mid-action.
+  The last scene lands the twist in as few words as possible, then one short tag line.
+- Narrator: `en-US-AndrewNeural` (male "I") or `en-US-AvaNeural` (female "I"); match the story.
+- `image`: one vivid, filmable moment per scene. Describe each character once and reuse the exact
+  description in every prompt. The shared cartoon `style` is added automatically.
+- Title: under 50 characters, curiosity plus one emoji ("Dad Bought a Robot That Slaps Liars 🤖").
+  Description: the fictional disclaimer, then hashtags. Category 23 (Comedy).
+- Clean twists only: no drugs, crime glorification, violence, sexual content or real people. Wit, karma,
+  clever comebacks, pets, family, office, school, neighbours. Classic jokes are fine if retold freshly.
+- Write 14 at a time (two Shorts a day for a week) and vary settings and narrators.

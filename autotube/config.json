@@ -1,5 +1,5 @@
 {
-  "niche": "Hindi family and moral stories (hindi kahani), 8-10 minute videos plus a Short teaser",
+  "niche": "English first-person twist-story Shorts (about 50 seconds, funny clean twists, AI cartoon pictures)",
   "candidate_niches": [
     "space facts",
     "psychology facts",
@@ -12,27 +12,27 @@
     "ocean mysteries",
     "life hacks"
   ],
-  "voice": "hi-IN-MadhurNeural",
+  "voice": "en-US-AndrewNeural",
   "voices": {
     "en": "en-IN-NeerjaNeural",
     "hi": "hi-IN-SwaraNeural"
   },
-  "voice_rate": "-4%",
+  "voice_rate": "+8%",
   "words_per_caption": 3,
   "privacy": "public",
   "publish_hour_utc": 14,
   "made_for_kids": false,
   "contains_synthetic_media": false,
-  "category_id": "24",
+  "category_id": "23",
   "music_volume": 0.12,
   "videos_per_run": 2,
   "channel": {
-    "name": "Kahani Ghar",
-    "name_hi": "कहानी घर",
-    "tagline_hi": "हर दिन एक नई कहानी"
+    "name": "Twist Tales",
+    "name_hi": "Twist Tales",
+    "tagline_hi": "Stories with a twist, every day"
   },
   "animation": {
-    "mode": "hook",
+    "mode": "off",
     "model": "minimax/h3-max-turbo/image-to-video",
     "hook_seconds": 60
   }
