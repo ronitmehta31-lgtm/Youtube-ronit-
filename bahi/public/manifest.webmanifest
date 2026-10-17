@@ -1,0 +1,10 @@
+{
+  "name": "Bahi",
+  "short_name": "Bahi",
+  "description": "GST billing, stock and accounts. Works offline.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b6b5d",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
