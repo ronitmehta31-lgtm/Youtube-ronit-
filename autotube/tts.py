@@ -34,4 +34,4 @@ def synthesize(text, voice, rate, mp3_path, attempts=4):
             if attempt == attempts:
                 raise RuntimeError(f"voice failed after {attempts} attempts: {e!r}") from e
             print(f"    voice attempt {attempt} failed ({e!r}); retrying")
-            time.sleep(10 * attempt)
+            time.sleep(30 * attempt * attempt)  # 30s, 2 min, 4.5 min: rate limits (HTTP 429) need real breaks
