@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Generated from replica/design/tokens.json. Components use the role names, never hex. */
+:root {
+  --c-bg: #ffffff;
+  --c-surface: #f4f6f5;
+  --c-surface-2: #e9eeec;
+  --c-border: #dde3e1;
+  --c-border-input: #7b8783;
+  --c-text: #131a18;
+  --c-text-muted: #55615d;
+  --c-accent: #0b6b5d;
+  --c-accent-strong: #08544a;
+  --c-accent-soft: #e3f2ef;
+  --c-on-accent: #ffffff;
+  --c-danger: #b42323;
+  --c-danger-soft: #fdecec;
+  --c-success: #17703f;
+  --c-success-soft: #e6f4ec;
+  --c-warning: #8a5a00;
+  --c-warning-soft: #fdf3dc;
+  --c-nav: #10231f;
+  --c-on-nav: #e8f0ee;
+  --c-on-nav-muted: #a9bcb7;
+  --shadow-card: 0 1px 2px rgba(16, 35, 31, 0.06), 0 1px 3px rgba(16, 35, 31, 0.08);
+  --shadow-pop: 0 12px 32px rgba(16, 35, 31, 0.18);
+  --font-sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+html, body, #root { height: 100%; }
+body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-sans); font-size: 14px; line-height: 20px; }
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+input[type='number']::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type='number'] { -moz-appearance: textfield; }
+
+@media print {
+  @page { margin: 10mm; }
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-area { box-shadow: none !important; border: 0 !important; margin: 0 !important; max-width: none !important; }
+  .print-thermal80 { width: 72mm !important; }
+  .print-thermal58 { width: 48mm !important; }
+}
