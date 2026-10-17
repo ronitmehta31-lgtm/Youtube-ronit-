@@ -123,7 +123,8 @@ def fal_image(prompt, out_path, width, height, seed, key):
     r = requests.post(FAL_FLUX, headers={"Authorization": f"Key {key}"}, timeout=180, json={
         "prompt": prompt, "image_size": {"width": width, "height": height}, "num_inference_steps": 4,
         "seed": seed, "enable_safety_checker": True})
-    r.raise_for_status()
+    if r.status_code != 200:  # fal explains itself in the body, e.g. "Exhausted balance"
+        raise requests.HTTPError(f"HTTP {r.status_code}: {r.text[:200]}")
     url = r.json()["images"][0]["url"]
     download(url, out_path)
     hosted_urls[str(out_path)] = url
