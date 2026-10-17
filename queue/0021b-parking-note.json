@@ -1,0 +1,51 @@
+{
+  "title": "I Left a Note for the Traffic Cop 🚗",
+  "description": "This story may be inspired by real events or jokes, but all names and details are fictional. Any resemblance to real people is coincidental.\n\n#funny #storytime #parking #shorts",
+  "tags": [
+    "parking ticket",
+    "funny note",
+    "funny story",
+    "storytime",
+    "twist ending",
+    "shorts"
+  ],
+  "category_id": "23",
+  "voice": "en-US-AndrewNeural",
+  "voice_rate": "+8%",
+  "style": "3D animated cartoon movie style, expressive characters with big eyes, vibrant colours, cinematic lighting, vertical composition, highly detailed, no text, no letters, no watermark",
+  "seed": 7,
+  "scenes": [
+    {
+      "text": "I was late for the most important job interview of my life, and there was not one parking spot in the entire city.",
+      "image": "a stressed young man about 30 in a suit holding car keys driving in circles in a crowded city street, sweating, every spot taken"
+    },
+    {
+      "text": "I circled the block ten times. Finally, I parked in a no parking zone.",
+      "image": "a stressed young man about 30 in a suit holding car keys parking under a big no parking sign, nervous"
+    },
+    {
+      "text": "I wrote a note and put it on my windshield. Dear officer, I circled this block ten times. I'm late for a job interview. Please forgive my trespass.",
+      "image": "a stressed young man about 30 in a suit holding car keys tucking a handwritten note under a windshield wiper"
+    },
+    {
+      "text": "The interview went amazing. I got the job. I came back smiling.",
+      "image": "a stressed young man about 30 in a suit holding car keys walking out of an office building happily, fist pump"
+    },
+    {
+      "text": "And there it was. A parking ticket. With a note of its own.",
+      "image": "close-up of a parking ticket and a note under a windshield wiper"
+    },
+    {
+      "text": "It said: I've circled this block for fifteen years. If I don't write tickets, I lose my job.",
+      "image": "a stern traffic police officer with a notepad and a cap smirking while writing a ticket, flashback style"
+    },
+    {
+      "text": "Then at the bottom: Congrats on the new job. You'll need it for this ticket.",
+      "image": "a stressed young man about 30 in a suit holding car keys reading the note, jaw dropped, then laughing in defeat"
+    },
+    {
+      "text": "Best job interview I ever had. Most expensive one too.",
+      "image": "a stressed young man about 30 in a suit holding car keys paying a ticket at a counter, shrugging with a smile"
+    }
+  ]
+}

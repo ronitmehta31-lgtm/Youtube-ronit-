@@ -1,0 +1,51 @@
+{
+  "title": "Dad Bought a Robot That Slaps Liars 🤖",
+  "description": "This story may be inspired by real events or jokes, but all names and details are fictional. Any resemblance to real people is coincidental.\n\n#funny #storytime #robot #shorts",
+  "tags": [
+    "lie detector robot",
+    "family joke",
+    "funny story",
+    "storytime",
+    "twist ending",
+    "shorts"
+  ],
+  "category_id": "23",
+  "voice": "en-US-AndrewNeural",
+  "voice_rate": "+8%",
+  "style": "3D animated cartoon movie style, expressive characters with big eyes, vibrant colours, cinematic lighting, vertical composition, highly detailed, no text, no letters, no watermark",
+  "seed": 7,
+  "scenes": [
+    {
+      "text": "My dad came home with a robot. He said, this robot slaps anyone who tells a lie. Let's test it at dinner.",
+      "image": "a strict father about 45 with glasses and a cardigan proudly placing a small cute white robot with a red light on its head and one mechanical arm on a family dinner table, a nervous 15-year-old boy with a backpack and a mother about 42 with curly hair, laughing staring"
+    },
+    {
+      "text": "He looked at me and asked, where were you after school today?",
+      "image": "a strict father about 45 with glasses and a cardigan staring suspiciously at a nervous 15-year-old boy with a backpack across the dinner table"
+    },
+    {
+      "text": "I said, at the library. The robot reached over and slapped me right across the face.",
+      "image": "a small cute white robot with a red light on its head and one mechanical arm slapping a nervous 15-year-old boy with a backpack at the dinner table, cartoon impact effect, dad looking satisfied"
+    },
+    {
+      "text": "Okay, okay, I was at my friend's house playing video games. The robot stayed quiet.",
+      "image": "a nervous 15-year-old boy with a backpack rubbing his cheek and confessing, a small cute white robot with a red light on its head and one mechanical arm calm with a green light"
+    },
+    {
+      "text": "Dad smiled. You see, son? When I was your age, I never lied to my parents.",
+      "image": "a strict father about 45 with glasses and a cardigan smugly lecturing with a raised finger"
+    },
+    {
+      "text": "The robot slapped dad.",
+      "image": "a small cute white robot with a red light on its head and one mechanical arm slapping a strict father about 45 with glasses and a cardigan, his glasses flying off, a nervous 15-year-old boy with a backpack shocked"
+    },
+    {
+      "text": "Mom burst out laughing and said, well, he is your son after all.",
+      "image": "a mother about 42 with curly hair, laughing laughing hard at the table"
+    },
+    {
+      "text": "The robot slapped mom. We've been very quiet at dinner ever since.",
+      "image": "a small cute white robot with a red light on its head and one mechanical arm slapping a mother about 42 with curly hair, laughing, then the whole family sitting silently with red cheeks, robot glowing"
+    }
+  ]
+}
