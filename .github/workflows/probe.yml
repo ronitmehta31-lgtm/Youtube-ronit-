@@ -6,12 +6,13 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - name: Try free AI pictures
+      - name: Which uploaded videos are public right now
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
         run: |
-          P="an%20old%20indian%20woman%20in%20a%20village%2C%20storybook%20illustration"
-          for q in "width=1024&height=576&model=flux" "width=1024&height=576&model=turbo" "width=768&height=432" ""; do
-            curl -s -o img.bin -w "pollinations [$q]: HTTP %{http_code}, %{size_download} bytes, %{time_total}s, %{content_type}\n" \
-              --max-time 70 "https://image.pollinations.ai/prompt/$P?$q&seed=3&nologo=true&referrer=autotube" || echo "pollinations [$q]: timed out"
-          done
+          curl -s "https://www.googleapis.com/youtube/v3/videos?part=status,snippet,statistics&id=CTSovIQf8XE,fdAiRnEIgRo,5r2hXFgxy08,a3nAA5YUkQ8,fiWzfuqrAaU,_AlFTDdXmfE,LuAQvia9MFM,Aoa64r3CEmY,YoXXrhnBSyk,kwYQDYg8ico,VlQ_mpec4uY,e3xLE8yH1kI,qDMehlR_b8A,xLfpXYauSlM,SeNlwx8zQUg,I5pFX4nz4Fc,ZS8R0gpMpus,8O9tfdZ5-Ww,uMZYv8EjwaI&key=$YT_API_KEY" \
+            | python3 -c "import json,sys; d=json.load(sys.stdin); print('visible to the public:', len(d.get('items',[])))
+          [print(v['id'], v['status']['privacyStatus'], v['statistics'].get('viewCount'), 'views |', v['snippet']['title'][:60]) for v in d.get('items',[])]
+          print(d.get('error',''))"
