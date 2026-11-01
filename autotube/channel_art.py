@@ -34,15 +34,17 @@ def main():
     out = ROOT / "assets" / "channel"
     out.mkdir(parents=True, exist_ok=True)
     work = Path(tempfile.mkdtemp())
-    if not visuals.ai_image(PROFILE, work / "p.jpg", 1024, 1024, 11):
+    profile = ch.get("profile_prompt", PROFILE)
+    banner = ch.get("banner_prompt", BANNER)
+    if not visuals.ai_image(profile, work / "p.jpg", 1024, 1024, 11):
         raise SystemExit("could not generate the profile picture")
     overlay(work / "p.jpg", out / "profile.jpg", 800, 800,
-            [f"{{\\pos(400,625)\\fs100\\c&H0000E5FF&\\bord8}}{ch['name_hi']}"], work)
-    if not visuals.ai_image(BANNER, work / "b.jpg", 2048, 1152, 12):
+            [f"{{\\pos(400,625)\\fs{100 if len(ch['name_hi']) < 9 else 86}\\c&H0000E5FF&\\bord8}}{ch['name_hi']}"], work)
+    if not visuals.ai_image(banner, work / "b.jpg", 2048, 1152, 12):
         raise SystemExit("could not generate the banner")
     # YouTube shows only the middle 1546x423 on every device, so keep the text there.
     overlay(work / "b.jpg", out / "banner.jpg", 2560, 1440, [
-        f"{{\\pos(1280,665)\\fs150\\c&H0000E5FF&\\bord9}}{ch['name_hi']} | {ch['name']}",
+        f"{{\\pos(1280,665)\\fs150\\c&H0000E5FF&\\bord9}}{ch['name'] if ch['name'] == ch['name_hi'] else ch['name_hi'] + ' | ' + ch['name']}",
         f"{{\\pos(1280,800)\\fs78\\bord6}}{ch['tagline_hi']}",
     ], work)
     print("wrote", out / "profile.jpg", out / "banner.jpg")

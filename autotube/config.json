@@ -29,7 +29,9 @@
   "channel": {
     "name": "Twist Tales",
     "name_hi": "Twist Tales",
-    "tagline_hi": "Stories with a twist, every day"
+    "tagline_hi": "Stories with a twist. Watch till the end!",
+    "profile_prompt": "a bold playful mascot logo: a cartoon open storybook with a glowing swirling purple and gold spiral twist rising out of it, centred, dark navy background, 3D cartoon style, vibrant, clean, no text, no letters",
+    "banner_prompt": "a wide playful 3D cartoon scene: curious cartoon characters (a grandma, a dog, a businessman, a robot, a student) peeking out of a giant open storybook with swirling purple and gold spiral twists and sparkles, dark navy night sky, a calm empty band across the middle, vibrant, cinematic lighting, no text, no letters"
   },
   "animation": {
     "mode": "all",

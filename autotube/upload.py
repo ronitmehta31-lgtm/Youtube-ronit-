@@ -43,12 +43,13 @@ def upload(video_path, script, config, short=True):
     title = script["title"]
     if short and "#shorts" not in title.lower() and len(title) <= 92:
         title += " #shorts"
+    privacy = script.get("privacy", config["privacy"])
     status = {
-        "privacyStatus": config["privacy"],
+        "privacyStatus": privacy,
         "selfDeclaredMadeForKids": script.get("made_for_kids", config["made_for_kids"]),
         "containsSyntheticMedia": script.get("contains_synthetic_media", config["contains_synthetic_media"]),
     }
-    if config["privacy"] == "scheduled":
+    if privacy == "scheduled":
         status["privacyStatus"] = "private"
         status["publishAt"] = next_publish_time(config["publish_hour_utc"])
     body = {

@@ -1,6 +1,6 @@
 """Higgsfield API (pay-as-you-go, separate from higgsfield.ai plans): pictures and animated clips.
 
-Needs HF_API_KEY_ID and HF_API_KEY_SECRET from console.higgsfield.ai. Every call is asynchronous:
+Needs HF_KEY ("key-id:key-secret", as the official SDK uses) or HF_API_KEY_ID + HF_API_KEY_SECRET. Every call is asynchronous:
 submit, poll the status URL, then download the output.
 """
 import os
@@ -13,12 +13,20 @@ IMAGE_MODEL = "higgsfield-ai/soul/standard"
 TERMINAL = {"completed", "failed", "nsfw", "canceled"}
 
 
+def _key():
+    key = os.environ.get("HF_KEY", "").strip()
+    if key:
+        return key
+    key_id, secret = os.environ.get("HF_API_KEY_ID", "").strip(), os.environ.get("HF_API_KEY_SECRET", "").strip()
+    return f"{key_id}:{secret}" if key_id and secret else ""
+
+
 def configured():
-    return bool(os.environ.get("HF_API_KEY_ID", "").strip() and os.environ.get("HF_API_KEY_SECRET", "").strip())
+    return bool(_key())
 
 
 def _headers():
-    key = f"{os.environ['HF_API_KEY_ID'].strip()}:{os.environ['HF_API_KEY_SECRET'].strip()}"
+    key = _key()
     return {"Authorization": f"Key {key}", "Content-Type": "application/json"}
 
 

@@ -19,6 +19,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Generate profile picture and banner
         env:
+          HF_KEY: ${{ secrets.HF_KEY }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
           PYTHONUNBUFFERED: "1"
         run: python -m autotube.channel_art
