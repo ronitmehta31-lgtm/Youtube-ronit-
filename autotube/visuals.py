@@ -17,6 +17,8 @@ from urllib.parse import quote
 
 import requests
 
+from . import higgsfield
+
 PIXABAY = "https://pixabay.com/api/videos/"
 PEXELS = "https://api.pexels.com/videos/search"
 COMMONS = "https://commons.wikimedia.org/w/api.php"
@@ -156,7 +158,13 @@ def ai_image(prompt, out_path, width, height, seed):
     fal = os.environ.get("FAL_KEY", "").strip()
     cf_account = os.environ.get("CF_ACCOUNT_ID", "").strip()
     cf_token = os.environ.get("CF_API_TOKEN", "").strip()
-    if fal:
+    if higgsfield.configured():
+        def hf_call():
+            url = higgsfield.image(prompt, "9:16" if height > width else "16:9")
+            download(url, out_path)
+            hosted_urls[str(out_path)] = url
+        name, call = "higgsfield", hf_call
+    elif fal:
         name, call = "fal.ai", lambda: fal_image(prompt, out_path, width, height, seed, fal)
     elif cf_account and cf_token:
         name, call = "cloudflare", lambda: cloudflare_image(prompt, out_path, seed, cf_account, cf_token)
@@ -167,7 +175,7 @@ def ai_image(prompt, out_path, width, height, seed):
             call()
             _ai_failures = 0
             return True
-        except (requests.RequestException, KeyError, ValueError) as e:
+        except (requests.RequestException, KeyError, ValueError, TimeoutError) as e:
             print(f"    {name} picture attempt {attempt + 1} failed: {str(e)[:200]}")
             time.sleep(5)
     _ai_failures += 1

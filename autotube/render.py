@@ -165,7 +165,7 @@ def prepare(script, config, work, fmt):
     # Optionally bring the pictures to life. "hook" animates roughly the first minute plus the Short's
     # scenes (where viewers decide to stay); "all" animates every picture.
     anim = {**{"mode": "off"}, **config.get("animation", {}), **script.get("animation", {})}
-    if fmt == "long" and anim["mode"] in ("hook", "all"):
+    if anim["mode"] in ("hook", "all"):
         chosen, total = set(), 0.0
         for i, sc in enumerate(scenes):
             if anim["mode"] == "all" or total < anim.get("hook_seconds", 60):

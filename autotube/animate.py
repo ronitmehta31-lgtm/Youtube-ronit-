@@ -10,7 +10,7 @@ from pathlib import Path
 
 import requests
 
-from . import visuals
+from . import higgsfield, visuals
 
 QUEUE = "https://queue.fal.run/"
 MOTION = ("gentle natural motion, characters move subtly and expressively, soft cinematic camera push-in, "
@@ -33,8 +33,51 @@ def picture_url(path):
     return "data:image/jpeg;base64," + base64.b64encode(Path(path).read_bytes()).decode()
 
 
+def animate_higgsfield(jobs, model, work, timeout=1500):
+    """Same as animate(), on the Higgsfield API. Pictures must already be hosted (made by Higgsfield)."""
+    pending = {}
+    for index, picture, prompt, seconds in jobs:
+        url = visuals.hosted_urls.get(str(picture))
+        if not url:
+            print(f"    scene {index + 1}: picture is not hosted on Higgsfield; staying still")
+            continue
+        try:
+            pending[index] = higgsfield.submit(model, {
+                "prompt": f"{prompt}. {MOTION}", "image_url": url, "duration": 10 if seconds > 6.5 else 5,
+                "negative_prompt": "blur, distortion, low quality, text, watermark, extra limbs"})
+        except requests.RequestException as e:
+            print(f"    animation submit failed for scene {index + 1}: {str(e)[:200]}")
+    print(f"  animating {len(pending)} scenes with Higgsfield {model}")
+
+    clips, deadline = {}, time.time() + timeout
+    while pending and time.time() < deadline:
+        time.sleep(10)
+        for index, req in list(pending.items()):
+            try:
+                s = higgsfield.status(req)
+            except requests.RequestException as e:
+                print(f"    scene {index + 1}: checking failed: {str(e)[:200]}")
+                continue
+            if s.get("status") not in higgsfield.TERMINAL:
+                continue
+            del pending[index]
+            url = (s.get("video") or {}).get("url")
+            if s.get("status") != "completed" or not url:
+                print(f"    scene {index + 1}: {s.get('status')} {s.get('error') or ''}")
+                continue
+            clip = work / f"anim{index}.mp4"
+            visuals.download(url, clip)
+            clips[index] = clip
+            print(f"    scene {index + 1} animated ({len(clips)} done, {len(pending)} waiting)")
+    if pending:
+        print(f"  gave up waiting for {len(pending)} clips; those scenes stay as still pictures")
+    return clips
+
+
 def animate(jobs, model, work, timeout=1500):
     """jobs: [(index, picture_path, prompt, seconds)]. Returns {index: clip_path} for the clips that worked."""
+    if model.startswith("higgsfield:"):
+        return animate_higgsfield(jobs, model.removeprefix("higgsfield:"), work, timeout) if higgsfield.configured() else {}
     key = os.environ.get("FAL_KEY", "").strip()
     if not key or not jobs:
         return {}
