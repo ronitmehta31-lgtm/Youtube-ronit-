@@ -2,3 +2,8 @@ out/
 __pycache__/
 *.pyc
 client_secret*.json
+
+# Local secrets (Higgsfield HF_KEY etc.): never commit
+.env
+.env.local
+.env.*.local
