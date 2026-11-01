@@ -1,0 +1,23 @@
+name: Test Higgsfield (Seedance 2.5)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Generate one Seedance 2.5 clip (billable)
+        env:
+          HF_KEY: ${{ secrets.HF_KEY }}
+          PYTHONUNBUFFERED: "1"
+        run: python main.py
