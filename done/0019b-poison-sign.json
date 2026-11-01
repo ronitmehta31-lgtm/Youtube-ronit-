@@ -48,5 +48,11 @@
       "image": "a sneaky middle-aged neighbour with a bald head and a thin mustache, wearing a striped vest suspiciously sniffing a banana at his kitchen table, sweating"
     }
   ],
-  "privacy": "private"
+  "privacy": "private",
+  "youtube": {
+    "id": "YTOfzAQBReA",
+    "url": "https://youtube.com/shorts/YTOfzAQBReA",
+    "privacy": "private",
+    "publish_at": null
+  }
 }
