@@ -88,5 +88,5 @@ jobs:
         run: |
           git config user.name "autotube-bot"
           git config user.email "autotube-bot@users.noreply.github.com"
-          git add clips/out
+          git add -f clips/out
           git diff --cached --quiet || (git commit -m "Clip: ${{ github.run_id }}" && git pull --rebase origin "$GITHUB_REF_NAME" && git push)
