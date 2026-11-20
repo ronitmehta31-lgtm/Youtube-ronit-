@@ -31,7 +31,7 @@ def overlay(src, out, w, h, events, work):
 
 def main():
     ch = json.loads((ROOT / "autotube" / "config.json").read_text())["channel"]
-    out = ROOT / "assets" / "channel"
+    out = ROOT / "assets" / "channel" / ch["name"].lower().replace(" ", "-")
     out.mkdir(parents=True, exist_ok=True)
     work = Path(tempfile.mkdtemp())
     profile = ch.get("profile_prompt", PROFILE)

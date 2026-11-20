@@ -27,11 +27,11 @@
   "music_volume": 0.12,
   "videos_per_run": 1,
   "channel": {
-    "name": "Twist Tales",
-    "name_hi": "Twist Tales",
-    "tagline_hi": "Stories with a twist. Watch till the end!",
-    "profile_prompt": "a bold playful mascot logo: a cartoon open storybook with a glowing swirling purple and gold spiral twist rising out of it, centred, dark navy background, 3D cartoon style, vibrant, clean, no text, no letters",
-    "banner_prompt": "a wide playful 3D cartoon scene: curious cartoon characters (a grandma, a dog, a businessman, a robot, a student) peeking out of a giant open storybook with swirling purple and gold spiral twists and sparkles, dark navy night sky, a calm empty band across the middle, vibrant, cinematic lighting, no text, no letters"
+    "name": "Clip Vault",
+    "name_hi": "Clip Vault",
+    "tagline_hi": "The best moments. Every day.",
+    "profile_prompt": "a bold modern 3D logo icon: a glowing round vault door slightly open with a bright play button shining out of it, neon cyan and magenta light, dark charcoal background, centred, clean, high contrast, no text, no letters",
+    "banner_prompt": "a wide dark cinematic background with neon cyan and magenta light streaks, floating film strips, glowing play buttons and a game controller silhouette, subtle bokeh sparkles, energetic, a calm empty dark band across the middle, no text, no letters"
   },
   "animation": {
     "mode": "all",
