@@ -117,11 +117,11 @@ def find_facecam(video, w, h, dur, samples=16):
         return None
     med = lambda k: sorted(m[k] for m in matches)[len(matches) // 2]
     fx, fy, fw, fh = med(0), med(1), med(2), med(3)
-    cw = min(w, fw * 3.4)
+    cw = min(w, fw * 3.2)
     ch = cw * CAM_H / W
     if ch > h:
         ch, cw = h, h * W / CAM_H
-    cx, cy = fx + fw / 2, fy + fh * 0.75  # a bit below the face centre, so shoulders show
+    cx, cy = fx + fw / 2, fy + fh * 0.45  # a little below the face centre, so shoulders show
     x = min(max(cx - cw / 2, 0), w - cw)
     y = min(max(cy - ch / 2, 0), h - ch)
     even = lambda v: int(v) // 2 * 2
@@ -129,8 +129,10 @@ def find_facecam(video, w, h, dur, samples=16):
     return even(x), even(y), even(cw), even(ch)
 
 
-def video_filter(layout, w, h, cam, game_x, ass):
+def video_filter(layout, w, h, cam, game_x, ass, crop_bottom=0.0):
+    """crop_bottom: fraction of the source height to cut from the gameplay (e.g. the stream's own captions)."""
     subs = f"subtitles={ass}:fontsdir={FONTS}"
+    h = int(h * (1 - crop_bottom)) // 2 * 2  # the gameplay only ever uses the top part
     if layout == "split":
         x, y, cw, ch = cam
         gh = h
@@ -146,8 +148,9 @@ def video_filter(layout, w, h, cam, game_x, ass):
         cw = int(h * 9 / 16) // 2 * 2
         gx = int(min(max((w - cw) * game_x, 0), w - cw)) // 2 * 2
         return f"[0:v]crop={cw}:{h}:{gx}:0,scale={W}:{H},setsar=1,fps={FPS},{subs}[v]"
+    pre = f"crop=iw:{h}:0:0,"
     # blur: the whole frame in the middle, a blurred zoomed copy behind it
-    return (f"[0:v]split[a][b];[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+    return (f"[0:v]{pre}split[a][b];[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
             f"boxblur=28:4,eq=brightness=-0.18[bg];[b]scale={W}:-2,setsar=1[fg];"
             f"[bg][fg]overlay=0:(H-h)/2,fps={FPS},{subs}[v]")
 
@@ -177,6 +180,17 @@ def esc(text):
     """Escape ASS override braces and drop emoji (the caption font has none; they stay in the title)."""
     text = re.sub(r"[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F\u200D]", "", text)
     return re.sub(r"\s+", " ", text).strip().replace("{", "(").replace("}", ")")
+
+
+SWEARS = {"fuck": "f*ck", "fucking": "f*cking", "fucker": "f*cker", "fucked": "f*cked", "motherfucker": "m*therf*cker",
+          "shit": "sh*t", "bitch": "b*tch", "ass": "a**", "asshole": "a**hole", "dick": "d*ck",
+          "pussy": "p*ssy", "bastard": "b*stard", "nigga": "n*gga", "nigger": "n****r",
+          "cunt": "c*nt", "slut": "sl*t", "whore": "wh*re", "retard": "r*tard", "faggot": "f****t"}
+
+
+def censor(word):
+    core = re.sub(r"[^\w']", "", word).lower()
+    return SWEARS[core] if core in SWEARS else word
 
 
 def chunks(words, size=3, gap=0.35):
@@ -229,7 +243,7 @@ def write_ass(path, words, dur, layout, hook, cta, handle):
     for gi, group in enumerate(groups):
         g_start = group[0][1]
         g_end = min(groups[gi + 1][0][1] if gi + 1 < len(groups) else dur, group[-1][2] + 0.6)
-        clean = [re.sub(r"[^\w'?!%$#&-]", "", w).upper() or w.upper() for w, _, _ in group]
+        clean = [censor(re.sub(r"[^\w'?!%$#&-]", "", w)).upper() or w.upper() for w, _, _ in group]
         for wi, (_, w_start, _) in enumerate(group):
             start = g_start if wi == 0 else w_start
             end = group[wi + 1][1] if wi + 1 < len(group) else g_end
@@ -272,6 +286,8 @@ def main(argv=None):
     p.add_argument("--layout", default="auto", choices=["auto", "split", "blur", "full"])
     p.add_argument("--cam", help="facecam box in the source as x,y,w,h pixels (overrides detection)")
     p.add_argument("--game-x", type=float, default=0.5, help="gameplay crop position, 0=left 0.5=centre 1=right")
+    p.add_argument("--crop-bottom", type=float, help="cut this fraction off the bottom of the gameplay "
+                   "(hides the stream's own captions); default from campaigns.json")
     p.add_argument("--model", default="base.en", help="whisper model: tiny.en, base.en, small.en")
     p.add_argument("--no-captions", action="store_true")
     p.add_argument("--words-json", help=argparse.SUPPRESS)  # testing: skip whisper
@@ -320,7 +336,8 @@ def main(argv=None):
 
     video = out_dir / f"{name}.mp4"
     run(["ffmpeg", "-y", "-v", "error", "-i", src, "-filter_complex",
-         video_filter(layout, w, h, cam, a.game_x, ass), "-map", "[v]", "-map", "0:a?",
+         video_filter(layout, w, h, cam, a.game_x, ass,
+                      a.crop_bottom if a.crop_bottom is not None else campaign.get("crop_bottom", 0.0)), "-map", "[v]", "-map", "0:a?",
          "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
          "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-movflags", "+faststart", video])
 
