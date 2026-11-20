@@ -157,8 +157,13 @@ def video_filter(layout, w, h, cam, game_x, ass):
 def transcribe(video, model_name):
     from faster_whisper import WhisperModel
     print(f"  transcribing with whisper {model_name}...", flush=True)
+    import numpy as np
+    # Decode with our own ffmpeg (16 kHz mono float) so faster-whisper never needs PyAV.
+    pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", str(video), "-vn", "-ac", "1", "-ar", "16000",
+                          "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    audio = np.frombuffer(pcm, dtype=np.float32)
     model = WhisperModel(model_name, device="cpu", compute_type="int8")
-    segments, _ = model.transcribe(str(video), language="en", word_timestamps=True, vad_filter=True)
+    segments, _ = model.transcribe(audio, language="en", word_timestamps=True, vad_filter=True)
     return [(w.word.strip(), w.start, w.end) for s in segments for w in (s.words or []) if w.word.strip()]
 
 
