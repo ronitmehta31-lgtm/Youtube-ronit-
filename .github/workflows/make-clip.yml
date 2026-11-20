@@ -1,0 +1,88 @@
+name: Make clip
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Twitch clip / Twitch VOD / YouTube link"
+        required: true
+      start:
+        description: "Start time in the video, e.g. 1:02:10 (leave empty for a Twitch clip)"
+        required: false
+      end:
+        description: "End time, e.g. 1:02:45 (leave empty for a Twitch clip)"
+        required: false
+      hook:
+        description: "Big text for the first 3 seconds, e.g. HE DID NOT EXPECT THIS"
+        required: false
+      title:
+        description: "YouTube title (optional; hashtags are added)"
+        required: false
+      layout:
+        description: "auto = facecam on top if found"
+        type: choice
+        options: [auto, split, blur, full]
+        default: auto
+      cam:
+        description: "Facecam box x,y,w,h in the source (only if auto gets it wrong)"
+        required: false
+      game_x:
+        description: "Gameplay crop position: 0 left, 0.5 centre, 1 right"
+        required: false
+        default: "0.5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: make-clip
+  cancel-in-progress: false
+
+jobs:
+  clip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: clipper/requirements.txt
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -r clipper/requirements.txt
+      - name: Cache the speech model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: whisper-base-en
+      - name: Make the clip
+        env:
+          URL: ${{ inputs.url }}
+          START: ${{ inputs.start }}
+          END: ${{ inputs.end }}
+          HOOK: ${{ inputs.hook }}
+          TITLE: ${{ inputs.title }}
+          LAYOUT: ${{ inputs.layout }}
+          CAM: ${{ inputs.cam }}
+          GAME_X: ${{ inputs.game_x }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          args=("$URL" --hook "$HOOK" --title "$TITLE" --layout "$LAYOUT" --game-x "${GAME_X:-0.5}")
+          [ -n "$START" ] && args+=(--start "$START")
+          [ -n "$END" ] && args+=(--end "$END")
+          [ -n "$CAM" ] && args+=(--cam "$CAM")
+          python -m clipper.clip "${args[@]}"
+      - name: Download link (zip)
+        uses: actions/upload-artifact@v4
+        with:
+          name: clip
+          path: clips/out/
+          retention-days: 14
+      - name: Save to the repo
+        run: |
+          git config user.name "autotube-bot"
+          git config user.email "autotube-bot@users.noreply.github.com"
+          git add clips/out
+          git diff --cached --quiet || (git commit -m "Clip: ${{ github.run_id }}" && git pull --rebase origin "$GITHUB_REF_NAME" && git push)

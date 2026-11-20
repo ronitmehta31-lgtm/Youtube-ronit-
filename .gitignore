@@ -7,3 +7,4 @@ client_secret*.json
 .env
 .env.local
 .env.*.local
+clips/work/
